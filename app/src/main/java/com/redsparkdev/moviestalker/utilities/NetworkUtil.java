@@ -32,9 +32,24 @@ public final class NetworkUtil {
                 .appendPath(sortBy)
                 .appendQueryParameter(API_PARAM, API_KEY)
                 .build();
+        return UrlBuild(builtUri);
+    }
+    public static URL buildImgUrl(String imgPath, String imgSize){
+        final String BASE_URL = "http://image.tmdb.org/t/p";
+        final StringBuilder path = new StringBuilder(imgPath);
+        path.deleteCharAt(0);
+
+        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                .appendPath(imgSize)
+                .appendPath(path.toString())
+                .build();
+
+        return UrlBuild(builtUri);
+    }
+    private static URL UrlBuild(Uri uri){
         URL url = null;
         try{
-            url = new URL(builtUri.toString());
+            url = new URL(uri.toString());
         }catch (MalformedURLException e){
             e.printStackTrace();
         }
@@ -68,6 +83,17 @@ public final class NetworkUtil {
     public static final class SortBy {
         public static final String TOP_RATED = "top_rated";
         public static final String POPULAR = "popular";
+    }
+    public static final class ImageSize{
+        public static final String W92 = "w92";
+        public static final String W154 = "w154";
+        public static final String W185 = "w185";
+        public static final String W342 = "w342";
+        public static final String W500 = "w500";
+        public static final String W780 = "w780";
+        public static final String ORIGINAL = "original";
+
+
     }
 
 }

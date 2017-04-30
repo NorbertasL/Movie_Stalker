@@ -2,12 +2,15 @@ package com.redsparkdev.moviestalker;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.redsparkdev.moviestalker.utilities.MovieInfo;
+import com.redsparkdev.moviestalker.utilities.NetworkUtil;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by Red on 30/04/2017.
@@ -42,7 +45,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
     @Override
     public void onBindViewHolder(MyAdapterViewHolder holder, int position) {
         String thisMoviesPosterPath = movieData[position].getPoster_path();
-        holder.movieTextView.setText(thisMoviesPosterPath);
+        String imgUrl = NetworkUtil.buildImgUrl(thisMoviesPosterPath, NetworkUtil.ImageSize.W185).toString();
+        Log.v("URL:", imgUrl);
+        //having trouble scaling the image
+        //TODO fugure out how to scale the image
+        Picasso.with(holder.holderView.getContext()).load(imgUrl).into(holder.movieImageView);
+        //holder.movieImageView.setText(thisMoviesPosterPath);
+
 
 
     }
@@ -54,10 +63,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
         return movieData.length;
     }
     public class MyAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public final TextView movieTextView;
+        public final ImageView movieImageView;
+        public final View holderView;
         public MyAdapterViewHolder(View view) {
             super(view);
-            movieTextView = (TextView) view.findViewById(R.id.image_thumbnail);
+            holderView = view;
+            movieImageView = (ImageView) view.findViewById(R.id.image_thumbnail);
             view.setOnClickListener(this);
         }
     @Override
