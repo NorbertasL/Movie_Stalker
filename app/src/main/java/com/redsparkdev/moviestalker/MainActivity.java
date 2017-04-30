@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.redsparkdev.moviestalker.utilities.FetchMovieData;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapterOnClickHandler{
     private RecyclerView recyclerView;
@@ -46,5 +49,22 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         myAdapter.setMovieData(temp);
 
 
+    }
+    public void showLoadingIndicator(){
+        loadingIndicator.setVisibility(View.VISIBLE);
+    }
+    public void showErrorMessage(){
+        recyclerView.setVisibility(View.INVISIBLE);
+        loadingIndicator.setVisibility(View.INVISIBLE);
+        errorMessageDisplay.setVisibility(View.VISIBLE);
+
+    }
+    public void showMovieData(){
+        errorMessageDisplay.setVisibility(View.INVISIBLE);
+        loadingIndicator.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+    public void setMovieData(String[] movieData){
+        myAdapter.setMovieData(movieData);
     }
 }
