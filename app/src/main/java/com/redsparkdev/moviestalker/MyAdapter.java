@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.redsparkdev.moviestalker.utilities.MovieInfo;
+
 /**
  * Created by Red on 30/04/2017.
  */
@@ -14,7 +16,7 @@ import android.widget.TextView;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolder> {
 
     //Stores all the movie data(not images)
-    private String[] movieData;
+    private MovieInfo[] movieData;
 
     private MyAdapterOnClickHandler clickHandler;
 
@@ -39,8 +41,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
 
     @Override
     public void onBindViewHolder(MyAdapterViewHolder holder, int position) {
-        String thisMoviesData = movieData[position];
-        holder.movieTextView.setText(thisMoviesData);
+        String thisMoviesPosterPath = movieData[position].getPoster_path();
+        holder.movieTextView.setText(thisMoviesPosterPath);
 
 
     }
@@ -61,12 +63,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
     @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            String movieInfo = movieData[adapterPosition];
-            clickHandler.onClick(movieInfo);
+            String thisMoviesPosterPath = movieData[adapterPosition].getPoster_path();
+            clickHandler.onClick(thisMoviesPosterPath);
 
         }
     }
-    public void setMovieData(String [] movieData){
+    public void setMovieData(MovieInfo[] movieData){
         this.movieData = movieData;
         notifyDataSetChanged();
     }

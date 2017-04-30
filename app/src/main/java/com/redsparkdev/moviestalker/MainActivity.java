@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.redsparkdev.moviestalker.utilities.FetchMovieData;
+import com.redsparkdev.moviestalker.utilities.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapterOnClickHandler{
@@ -46,10 +48,8 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
 
     }
     private void  loadMovieData(){
-        String url = NetworkUtil.buildUrl(NetworkUtil.SortBy.POPULAR).toString();
-        //Dummy data for now
-        String[] temp = {url, "2,", "3"};
-        myAdapter.setMovieData(temp);
+
+        new FetchMovieData(this).execute(NetworkUtil.SortBy.POPULAR);
 
 
     }
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     }
 
 
-    public void setMovieData(String[] movieData){
+    public void setMovieData(MovieInfo[] movieData){
         myAdapter.setMovieData(movieData);
     }
 }

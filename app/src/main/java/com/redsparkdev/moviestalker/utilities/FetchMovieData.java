@@ -1,8 +1,12 @@
 package com.redsparkdev.moviestalker.utilities;
 
 import android.os.AsyncTask;
+import android.os.LocaleList;
+import android.util.Log;
+
 import com.redsparkdev.moviestalker.MainActivity;
 
+import java.io.IOException;
 import java.net.URL;
 
 
@@ -11,7 +15,7 @@ import java.net.URL;
  * The AsyncTask to make the data retrieval on separate thread.
  */
 
-public class FetchMovieData extends AsyncTask<String, Void, String[]> {
+public class FetchMovieData extends AsyncTask<String, Void, MovieInfo[]> {
     private final MainActivity mainActivity;
     //We have a constructor just to get access to the Main Activity
     public FetchMovieData(MainActivity mainActivity){
@@ -26,23 +30,34 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
 
     }
     @Override
-    protected String[] doInBackground(String... params) {
+    protected MovieInfo[] doInBackground(String... params) {
         if(params.length == 0)
             return null;
         String sortBy = params[0];
         //TODO make a url constructor
+        URL movieRequestUrl = NetworkUtil.buildUrl(sortBy);
+        try{
+            String jsonMovieResponse = NetworkUtil.getResponseFromHttpUrl(movieRequestUrl);
+            MovieInfo [] movieData = MoviedbJsonUtil.getMovieObjects(jsonMovieResponse);
+            return movieData;
+        }catch(IOException e){
+            e.printStackTrace();
+        }
 
-        return new String[0];
+        return null;
+
     }
 
     @Override
-    protected void onPostExecute(String[] strings) {
+    protected void onPostExecute(MovieInfo[] movies) {
         //Checks is anything was returned
-        if(strings !=null){
+        if(movies !=null){
+
             mainActivity.showMovieData();
-            mainActivity.setMovieData(strings);
+            mainActivity.setMovieData(movies);
         }else{
             //if array is empty shows a generic error
+            Log.v("TEST", "movies == null");
             mainActivity.showErrorMessage();
         }
     }

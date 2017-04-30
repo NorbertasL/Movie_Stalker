@@ -1,6 +1,11 @@
 package com.redsparkdev.moviestalker.utilities;
 
-import android.content.Context;
+
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Red on 30/04/2017.
@@ -9,9 +14,11 @@ import android.content.Context;
  */
 
 public final class MoviedbJsonUtil{
-    public static MovieInfo[] getMovieObjects(Context context, String movieJsonString){
+    public static MovieInfo[] getMovieObjects(String movieJsonString){
+        final String TAG = MoviedbJsonUtil.class.getSimpleName();
 
         //JSON keywords
+        final String STATUS_CODE = "status_code";//this indicates an error1
         final String PAGE = "page";
         final String RESULTS = "results";
         final String POSTER_PATH = "poster_path";
@@ -22,6 +29,32 @@ public final class MoviedbJsonUtil{
         final String VOTE_COUNT = "vote_count";
         final String VOTE_AVERAGE = "vote_average";
 
+        MovieInfo[] movies;
+
+        try {
+            JSONObject movieJson = new JSONObject((movieJsonString));
+            if(movieJson.has(STATUS_CODE)){
+                Log.v(TAG, "Error:"+ movieJson.getInt(STATUS_CODE));
+                return null;
+            }
+            JSONArray movieArray = movieJson.getJSONArray(RESULTS);
+
+            movies = new MovieInfo[movieArray.length()];
+
+            for(int i = 0; i < movieArray.length(); i++){
+                JSONObject movieInfoJson = movieArray.getJSONObject(i);
+                //Log.v(TAG, ":"+movieInfoJson.getString(TITLE));
+                movies[i] = new MovieInfo();
+                movies[i].setPoster_path(movieInfoJson.getString(POSTER_PATH));
+
+            }
+
+            return movies;
+
+        }catch(JSONException e){
+            //TODO handle exception
+            Log.e(TAG, e.toString());
+        }
         return null;
     }
 

@@ -5,6 +5,12 @@ package com.redsparkdev.moviestalker.utilities;
  * Store all data related to the movie
  */
 
+/**
+ * Question:Any better way to store data like this or is this acceptable?
+ * I was thinking of using a multi-dimensional String array, but the readability would suffer.
+ * This just looks a lot cleaner.
+ */
+
 public class MovieInfo {
    //making them into empty string instead of null to prevent errors
     private String poster_path ="";
