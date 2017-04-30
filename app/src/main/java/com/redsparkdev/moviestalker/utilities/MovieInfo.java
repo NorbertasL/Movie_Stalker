@@ -14,7 +14,10 @@ import java.io.Serializable;
  */
 
 public class MovieInfo implements Serializable {
-   //making them into empty string instead of null to prevent errors
+
+
+    //making them into empty string instead of null to prevent errors
+    private String full_poster_path="";
     private String poster_path ="";
     private String overview="";
     private String release_date="";
@@ -78,6 +81,14 @@ public class MovieInfo implements Serializable {
 
     public void setVote_average(String vote_average) {
         this.vote_average = vote_average;
+    }
+
+    public String getFull_poster_path() {
+        return full_poster_path;
+    }
+
+    public void setFull_poster_path(String full_poster_path) {
+        this.full_poster_path = full_poster_path;
     }
 
 

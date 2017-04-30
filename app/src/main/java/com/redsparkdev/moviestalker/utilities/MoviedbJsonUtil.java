@@ -19,10 +19,10 @@ public final class MoviedbJsonUtil{
 
         //JSON keywords
         final String STATUS_CODE = "status_code";//this indicates an error1
-        final String PAGE = "page";
+        //final String PAGE = "page";
         final String RESULTS = "results";
         final String POSTER_PATH = "poster_path";
-        final String OWERVIEW = "overview";
+        final String OVERVIEW = "overview";
         final String RELEASE_DATE= "release_date";
         final String TITLE = "title";
         final String POPULARITY = "popularity";
@@ -47,6 +47,11 @@ public final class MoviedbJsonUtil{
                 movies[i] = new MovieInfo();
                 movies[i].setPoster_path(movieInfoJson.getString(POSTER_PATH));
                 movies[i].setTitle(movieInfoJson.getString(TITLE));
+                movies[i].setOverview(movieInfoJson.getString(OVERVIEW));
+                movies[i].setRelease_date(movieInfoJson.getString(RELEASE_DATE));
+                movies[i].setPopularity(movieInfoJson.getString(POPULARITY));
+                movies[i].setVote_count(movieInfoJson.getString(VOTE_COUNT));
+                movies[i].setVote_average(VOTE_AVERAGE);
 
             }
 

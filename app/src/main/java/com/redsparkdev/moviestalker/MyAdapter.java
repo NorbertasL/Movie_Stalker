@@ -46,7 +46,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
     public void onBindViewHolder(MyAdapterViewHolder holder, int position) {
         String thisMoviesPosterPath = movieData[position].getPoster_path();
         String imgUrl = NetworkUtil.buildImgUrl(thisMoviesPosterPath, NetworkUtil.ImageSize.W185).toString();
-        Log.v("URL:", imgUrl);
+        movieData[position].setFull_poster_path(imgUrl);
         //having trouble scaling the image
         //TODO fugure out how to scale the image
         Picasso.with(holder.holderView.getContext()).load(imgUrl).into(holder.movieImageView);
