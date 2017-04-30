@@ -5,13 +5,15 @@ package com.redsparkdev.moviestalker.utilities;
  * Store all data related to the movie
  */
 
+import java.io.Serializable;
+
 /**
  * Question:Any better way to store data like this or is this acceptable?
  * I was thinking of using a multi-dimensional String array, but the readability would suffer.
  * This just looks a lot cleaner.
  */
 
-public class MovieInfo {
+public class MovieInfo implements Serializable {
    //making them into empty string instead of null to prevent errors
     private String poster_path ="";
     private String overview="";

@@ -1,6 +1,6 @@
 package com.redsparkdev.moviestalker;
 
-import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.redsparkdev.moviestalker.utilities.FetchMovieData;
 import com.redsparkdev.moviestalker.utilities.MovieInfo;
@@ -46,8 +45,10 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     }
 
     @Override
-    public void onClick(String movieId) {
-        Toast.makeText(this, movieId, Toast.LENGTH_LONG).show();
+    public void onClick(MovieInfo movieInfoObject) {
+        Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
+        intent.putExtra("MovieInfoObject", movieInfoObject);
+        startActivity(intent);
 
     }
     private void  loadMovieData(){

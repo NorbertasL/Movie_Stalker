@@ -46,6 +46,7 @@ public final class MoviedbJsonUtil{
                 //Log.v(TAG, ":"+movieInfoJson.getString(TITLE));
                 movies[i] = new MovieInfo();
                 movies[i].setPoster_path(movieInfoJson.getString(POSTER_PATH));
+                movies[i].setTitle(movieInfoJson.getString(TITLE));
 
             }
 

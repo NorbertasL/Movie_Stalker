@@ -24,7 +24,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
     private MyAdapterOnClickHandler clickHandler;
 
     public interface MyAdapterOnClickHandler {
-        void onClick(String movieId);
+        void onClick(MovieInfo movieInfoObject);
     }
 
     public MyAdapter(MyAdapterOnClickHandler clickHandler){
@@ -74,8 +74,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
     @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            String thisMoviesPosterPath = movieData[adapterPosition].getPoster_path();
-            clickHandler.onClick(thisMoviesPosterPath);
+            clickHandler.onClick(movieData[adapterPosition]);
 
         }
     }
