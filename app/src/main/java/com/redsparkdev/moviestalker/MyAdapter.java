@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolder> {
 
+    //Stores all the movie data(not images)
     private String[] movieData;
 
     private MyAdapterOnClickHandler clickHandler;

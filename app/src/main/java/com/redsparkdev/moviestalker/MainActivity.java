@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.redsparkdev.moviestalker.utilities.FetchMovieData;
+import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapterOnClickHandler{
+
     private RecyclerView recyclerView;
     private TextView errorMessageDisplay;
     private ProgressBar loadingIndicator;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         errorMessageDisplay = (TextView)findViewById(R.id.error_message_display);
         loadingIndicator = (ProgressBar)findViewById(R.id.loading_indicator);
 
-        //Will be using a GridLayout for displaying the images
+        //Will be using a GridLayoutManager for displaying the images
         int spanCount = 2;
         GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -45,11 +46,15 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
 
     }
     private void  loadMovieData(){
-        String[] temp = {"1", "2,", "3"};
+        String url = NetworkUtil.buildUrl(NetworkUtil.SortBy.POPULAR).toString();
+        //Dummy data for now
+        String[] temp = {url, "2,", "3"};
         myAdapter.setMovieData(temp);
 
 
     }
+
+    //Methods to manage views
     public void showLoadingIndicator(){
         loadingIndicator.setVisibility(View.VISIBLE);
     }
@@ -64,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         loadingIndicator.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
     }
+
+
     public void setMovieData(String[] movieData){
         myAdapter.setMovieData(movieData);
     }
