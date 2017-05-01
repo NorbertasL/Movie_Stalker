@@ -2,6 +2,13 @@
     <string name="app_name">Movie Stalker</string>
     <string name="generic_error">Ops, an error has occurred!</string>
 
+    <!--toolbar strings-->
     <string name="sortBy_most_popular">Most Popular</string>
     <string name="sortBy_highest_rated">Highest Rated</string>
+
+
+    <!--movie details strings-->
+    <string name="release_date">Release Date:</string>
+    <string name="rating">Rating:</string>
+    <string name="overview">Overview</string>
 </resources>

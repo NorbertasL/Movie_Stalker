@@ -37,8 +37,8 @@ public class MovieDetailActivity extends AppCompatActivity {
                 MovieInfo movieInfo = (MovieInfo) parentActivity.getSerializableExtra("MovieInfoObject");
                 Picasso.with(this).load(movieInfo.getFull_poster_path()).into(imageImageView);
                 titleTextView.setText(movieInfo.getOriginal_title());
-                releaseDateTextView.setText(movieInfo.getRelease_date());
-                ratingTextView.setText(movieInfo.getVote_average());
+                releaseDateTextView.append(movieInfo.getRelease_date());
+                ratingTextView.append(movieInfo.getVote_average());
                 overviewTextView.setText(movieInfo.getOverview());
 
 

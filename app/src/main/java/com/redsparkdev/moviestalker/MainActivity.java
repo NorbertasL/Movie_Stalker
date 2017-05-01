@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
 
         //Will be using a GridLayoutManager for displaying the images
         int spanCount = 2;
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
