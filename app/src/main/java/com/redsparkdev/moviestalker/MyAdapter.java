@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.redsparkdev.moviestalker.utilities.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 import com.squareup.picasso.Picasso;
@@ -46,13 +45,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
         String thisMoviesPosterPath = movieData[position].getPoster_path();
         String imgUrl = NetworkUtil.buildImgUrl(thisMoviesPosterPath, NetworkUtil.ImageSize.W185).toString();
         movieData[position].setFull_poster_path(imgUrl);
-        //having trouble scaling the image
-        //TODO fugure out how to scale the image
+        //Using Picasso to handle the image
         Picasso.with(holder.holderView.getContext()).load(imgUrl).into(holder.movieImageView);
-        //holder.movieImageView.setText(thisMoviesPosterPath);
-
-
-
     }
 
     @Override
@@ -62,9 +56,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
         return movieData.length;
     }
     public class MyAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public final ImageView movieImageView;
-        public final View holderView;
-        public MyAdapterViewHolder(View view) {
+        private final ImageView movieImageView;
+        private final View holderView;
+        private MyAdapterViewHolder(View view) {
             super(view);
             holderView = view;
             movieImageView = (ImageView) view.findViewById(R.id.image_thumbnail);

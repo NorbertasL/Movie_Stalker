@@ -1,26 +1,19 @@
 package com.redsparkdev.moviestalker;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-
 import com.redsparkdev.moviestalker.utilities.FetchMovieData;
 import com.redsparkdev.moviestalker.utilities.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
@@ -35,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         //Finding an binding ids
@@ -43,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         loadingIndicator = (ProgressBar)findViewById(R.id.loading_indicator);
 
         //Will be using a GridLayoutManager for displaying the images
-        int spanCount = 2;
+        int spanCount = 2;//number of colums
         GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -51,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         myAdapter = new MyAdapter(this);
 
         recyclerView.setAdapter(myAdapter);
-
-
     }
 
     @Override
@@ -63,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
 
     }
     private void  loadMovieData(String sortBy){
-
         new FetchMovieData(this).execute(sortBy);
 
 
@@ -94,9 +85,9 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
 
+        //handles the drop down menu aka spinner
         MenuItem item = menu.findItem(R.id.spinner_sort_by);
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -115,14 +106,9 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
 
 
             } // to close the onItemSelected
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
         return true;
-
     }
-
-
 }

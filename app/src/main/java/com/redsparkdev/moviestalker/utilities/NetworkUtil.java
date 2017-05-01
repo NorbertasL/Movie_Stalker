@@ -1,10 +1,6 @@
 package com.redsparkdev.moviestalker.utilities;
 
 import android.net.Uri;
-import android.util.Log;
-
-import com.redsparkdev.moviestalker.API_KEY;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;

@@ -28,6 +28,7 @@ public class MovieInfo implements Serializable {
     private String vote_average="";
 
 
+    //Getters and setters
     public String getPoster_path() {
         return poster_path;
     }

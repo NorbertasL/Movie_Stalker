@@ -1,8 +1,6 @@
 package com.redsparkdev.moviestalker.utilities;
 
-
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,11 +13,10 @@ import org.json.JSONObject;
 
 public final class MoviedbJsonUtil{
     public static MovieInfo[] getMovieObjects(String movieJsonString){
-        final String TAG = MoviedbJsonUtil.class.getSimpleName();
 
+        final String TAG = MoviedbJsonUtil.class.getSimpleName();
         //JSON keywords
         final String STATUS_CODE = "status_code";//this indicates an error1
-        //final String PAGE = "page";
         final String RESULTS = "results";
         final String POSTER_PATH = "poster_path";
         final String OVERVIEW = "overview";
@@ -45,6 +42,8 @@ public final class MoviedbJsonUtil{
             for(int i = 0; i < movieArray.length(); i++){
                 JSONObject movieInfoJson = movieArray.getJSONObject(i);
                 //Log.v(TAG, ":"+movieInfoJson.getString(TITLE));
+
+                //Assigning the strings to the object
                 movies[i] = new MovieInfo();
                 movies[i].setPoster_path(movieInfoJson.getString(POSTER_PATH));
                 movies[i].setTitle(movieInfoJson.getString(TITLE));
@@ -55,14 +54,11 @@ public final class MoviedbJsonUtil{
                 movies[i].setVote_average(movieInfoJson.getString(VOTE_AVERAGE));
                 movies[i].setOriginal_title(movieInfoJson.getString(ORIGINAL_TITLE));
                 movies[i].setOriginal_title(movieInfoJson.getString(ORIGINAL_TITLE));
-
             }
-
             return movies;
 
         }catch(JSONException e){
-            //TODO handle exception
-            Log.e(TAG, e.toString());
+            e.printStackTrace();
         }
         return null;
     }
