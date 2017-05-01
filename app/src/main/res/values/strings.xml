@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Movie Stalker</string>
     <string name="generic_error">Ops, an error has occurred!</string>
+
+    <string name="sortBy_most_popular">Most Popular</string>
+    <string name="sortBy_highest_rated">Highest Rated</string>
 </resources>

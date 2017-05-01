@@ -1,13 +1,23 @@
 package com.redsparkdev.moviestalker;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.redsparkdev.moviestalker.utilities.FetchMovieData;
@@ -41,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
 
         recyclerView.setAdapter(myAdapter);
 
-        loadMovieData();
+
     }
 
     @Override
@@ -51,9 +61,9 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         startActivity(intent);
 
     }
-    private void  loadMovieData(){
+    private void  loadMovieData(String sortBy){
 
-        new FetchMovieData(this).execute(NetworkUtil.SortBy.POPULAR);
+        new FetchMovieData(this).execute(sortBy);
 
 
     }
@@ -78,4 +88,40 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     public void setMovieData(MovieInfo[] movieData){
         myAdapter.setMovieData(movieData);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+
+        MenuItem item = menu.findItem(R.id.spinner_sort_by);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+
+        //Listens for dropdown menu selections
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                if(selectedItem.equals(getString(R.string.sortBy_most_popular))){
+                    loadMovieData(NetworkUtil.SortBy.POPULAR);
+                }else if(selectedItem.equals(getString(R.string.sortBy_highest_rated))){
+                    loadMovieData(NetworkUtil.SortBy.TOP_RATED);
+                }
+
+
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+        return true;
+
+    }
+
+
 }
