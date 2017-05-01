@@ -25,6 +25,7 @@ public final class MoviedbJsonUtil{
         final String OVERVIEW = "overview";
         final String RELEASE_DATE= "release_date";
         final String TITLE = "title";
+        final String ORIGINAL_TITLE="original_title";
         final String POPULARITY = "popularity";
         final String VOTE_COUNT = "vote_count";
         final String VOTE_AVERAGE = "vote_average";
@@ -51,7 +52,9 @@ public final class MoviedbJsonUtil{
                 movies[i].setRelease_date(movieInfoJson.getString(RELEASE_DATE));
                 movies[i].setPopularity(movieInfoJson.getString(POPULARITY));
                 movies[i].setVote_count(movieInfoJson.getString(VOTE_COUNT));
-                movies[i].setVote_average(VOTE_AVERAGE);
+                movies[i].setVote_average(movieInfoJson.getString(VOTE_AVERAGE));
+                movies[i].setOriginal_title(movieInfoJson.getString(ORIGINAL_TITLE));
+                movies[i].setOriginal_title(movieInfoJson.getString(ORIGINAL_TITLE));
 
             }
 

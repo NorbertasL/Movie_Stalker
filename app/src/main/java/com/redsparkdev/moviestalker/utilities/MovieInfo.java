@@ -22,6 +22,7 @@ public class MovieInfo implements Serializable {
     private String overview="";
     private String release_date="";
     private String title="";
+    private String original_title="";
     private String popularity="";
     private String vote_count="";
     private String vote_average="";
@@ -90,6 +91,14 @@ public class MovieInfo implements Serializable {
     public void setFull_poster_path(String full_poster_path) {
         this.full_poster_path = full_poster_path;
     }
+    public String getOriginal_title() {
+        return original_title;
+    }
+
+    public void setOriginal_title(String original_title) {
+        this.original_title = original_title;
+    }
+
 
 
 }
