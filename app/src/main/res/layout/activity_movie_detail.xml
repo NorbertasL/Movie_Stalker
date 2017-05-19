@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+<LinearLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.redsparkdev.moviestalker.MovieDetailActivity">
-
     <TextView
         android:id="@+id/tv_movie_details_title"
         android:layout_width="match_parent"
@@ -18,22 +21,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <ImageView
+            android:id="@+id/iv_movie_details_image"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/iv_movie_details_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                />
-        </LinearLayout>
+            android:adjustViewBounds="true"
+            android:layout_weight="1"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1">
@@ -45,43 +42,34 @@
                 android:text="@string/release_date"
                 android:textSize="15sp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tv_movie_details_rating"
                 android:text="@string/rating"
                 android:textSize="15sp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
-    <ScrollView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
-        <LinearLayout
-            android:layout_width="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="@string/overview"
-                android:textStyle="bold"
-                android:textSize="30sp"/>
-            <TextView
-                android:id="@+id/tv_movie_details_overview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"/>
-        </LinearLayout>
-
-
-
-    </ScrollView>
-
-
+            android:textAlignment="center"
+            android:text="@string/overview"
+            android:textStyle="bold"
+            android:textSize="30sp"/>
+        <TextView
+            android:id="@+id/tv_movie_details_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"/>
+    </LinearLayout>
 </LinearLayout>
+
+</ScrollView>
+
