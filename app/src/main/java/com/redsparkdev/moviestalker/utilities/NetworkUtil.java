@@ -1,6 +1,8 @@
 package com.redsparkdev.moviestalker.utilities;
 
 import android.net.Uri;
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -28,6 +30,7 @@ public final class NetworkUtil {
                 .appendPath(sortBy)
                 .appendQueryParameter(API_PARAM, API_KEY)
                 .build();
+        Log.v("TAG", builtUri.toString());
         return UrlBuild(builtUri);
     }
     public static URL buildImgUrl(String imgPath, String imgSize){
@@ -77,6 +80,7 @@ public final class NetworkUtil {
         }
     }
     public static final class SortBy {
+        public static final String KEY = "sortBy";
         public static final String TOP_RATED = "top_rated";
         public static final String POPULAR = "popular";
     }

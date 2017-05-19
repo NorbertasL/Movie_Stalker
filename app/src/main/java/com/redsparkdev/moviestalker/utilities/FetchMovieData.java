@@ -1,6 +1,11 @@
 package com.redsparkdev.moviestalker.utilities;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
+
 import com.redsparkdev.moviestalker.MainActivity;
 import java.io.IOException;
 import java.net.URL;
@@ -11,7 +16,7 @@ import java.net.URL;
  * The AsyncTask to make the data retrieval on separate thread.
  */
 
-public class FetchMovieData extends AsyncTask<String, Void, MovieInfo[]> {
+public class FetchMovieData implements LoaderManager.LoaderCallbacks<MovieInfo[]> {
 
     private final MainActivity mainActivity;
 
@@ -21,37 +26,49 @@ public class FetchMovieData extends AsyncTask<String, Void, MovieInfo[]> {
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        //Shows a loading indicator on the screen
-        mainActivity.showLoadingIndicator();
+    public Loader<MovieInfo[]> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<MovieInfo[]>(mainActivity) {
+
+            @Override
+            public void onStartLoading(){
+                if (args == null) {
+                    return;
+                }
+                mainActivity.showLoadingIndicator();
+
+                forceLoad();
+            }
+
+            @Override
+            public MovieInfo[] loadInBackground() {
+                String sortBy = args.getString(NetworkUtil.SortBy.KEY);
+                URL movieRequestUrl = NetworkUtil.buildUrl(sortBy);
+                try{
+                    String jsonMovieResponse = NetworkUtil.getResponseFromHttpUrl(movieRequestUrl);
+                    MovieInfo [] movieData = MoviedbJsonUtil.getMovieObjects(jsonMovieResponse);
+                    return movieData;
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
     }
 
     @Override
-    protected MovieInfo[] doInBackground(String... params) {
-        if(params.length == 0)
-            return null;
-        String sortBy = params[0];
-        URL movieRequestUrl = NetworkUtil.buildUrl(sortBy);
-        try{
-            String jsonMovieResponse = NetworkUtil.getResponseFromHttpUrl(movieRequestUrl);
-            MovieInfo [] movieData = MoviedbJsonUtil.getMovieObjects(jsonMovieResponse);
-            return movieData;
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(MovieInfo[] movies) {
-        //Checks is anything was returned
-        if(movies !=null){
+    public void onLoadFinished(Loader<MovieInfo[]> loader, MovieInfo[] data) {
+        if(data !=null){
             mainActivity.showMovieData();
-            mainActivity.setMovieData(movies);
+            mainActivity.setMovieData(data);
         }else{
             //if array is empty shows a generic error
             mainActivity.showErrorMessage();
         }
     }
+
+    @Override
+    public void onLoaderReset(Loader<MovieInfo[]> loader) {
+
+    }
+
 }

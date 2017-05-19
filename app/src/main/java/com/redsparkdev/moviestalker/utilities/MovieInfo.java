@@ -6,6 +6,7 @@ package com.redsparkdev.moviestalker.utilities;
  */
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Question:Any better way to store data like this or is this acceptable?
@@ -26,6 +27,9 @@ public class MovieInfo implements Serializable {
     private String popularity="";
     private String vote_count="";
     private String vote_average="";
+
+    private List<String> trailers;
+    private List<String> reviews;
 
 
     //Getters and setters
@@ -98,6 +102,16 @@ public class MovieInfo implements Serializable {
 
     public void setOriginal_title(String original_title) {
         this.original_title = original_title;
+    }
+
+    public void clearTrilerList(){
+        trailers.clear();
+    }
+    public void setTrailers(String trilerJsom){
+        trailers.add(trilerJsom);
+    }
+    public List<String> getTrailers(){
+        return trailers;
     }
 
 

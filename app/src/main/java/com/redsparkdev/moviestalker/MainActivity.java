@@ -1,6 +1,8 @@
 package com.redsparkdev.moviestalker;
 
 import android.content.Intent;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +21,9 @@ import com.redsparkdev.moviestalker.utilities.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapterOnClickHandler{
+
+    private static final int GITHUB_SEARCH_LOADER = 1;
+
 
     private RecyclerView recyclerView;
     private TextView errorMessageDisplay;
@@ -55,10 +60,17 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
 
     }
     private void  loadMovieData(String sortBy){
-        new FetchMovieData(this).execute(sortBy);
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(NetworkUtil.SortBy.KEY, sortBy);
 
-
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(GITHUB_SEARCH_LOADER);
+        if (movieSearch == null) {
+            loaderManager.initLoader(GITHUB_SEARCH_LOADER, queryBundle, new FetchMovieData(this));
+        } else {
+        loaderManager.restartLoader(GITHUB_SEARCH_LOADER, queryBundle, new FetchMovieData(this));
     }
+}
 
     //Methods to manage views
     public void showLoadingIndicator(){
