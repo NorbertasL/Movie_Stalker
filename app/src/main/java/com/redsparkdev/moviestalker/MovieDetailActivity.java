@@ -1,20 +1,35 @@
 package com.redsparkdev.moviestalker;
 
 import android.content.Intent;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-
+import com.redsparkdev.moviestalker.utilities.FetchMovieTrailers;
 import com.redsparkdev.moviestalker.utilities.MovieInfo;
+import com.redsparkdev.moviestalker.utilities.NetworkUtil;
+import com.redsparkdev.moviestalker.utilities.TrailerInfo;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MovieDetailActivity extends AppCompatActivity {
+    private final static String TAG = MovieDetailActivity.class.getSimpleName().toString();
     private ImageView imageImageView;
     private TextView titleTextView;
     private TextView releaseDateTextView;
     private TextView ratingTextView;
     private TextView overviewTextView;
+
+    private MovieInfo movieInfo;
+
+    private static final int TRAILER_LOADER = 2;
 
 
     @Override
@@ -34,7 +49,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         //check if extra data was sent via intent
         if(parentActivity != null){
             if(parentActivity.hasExtra("MovieInfoObject")){
-                MovieInfo movieInfo = (MovieInfo) parentActivity.getSerializableExtra("MovieInfoObject");
+                movieInfo = (MovieInfo) parentActivity.getSerializableExtra("MovieInfoObject");
+
 
                 //gets the data from the movie object
                 Picasso.with(this).load(movieInfo.getFull_poster_path()).into(imageImageView);
@@ -42,7 +58,53 @@ public class MovieDetailActivity extends AppCompatActivity {
                 releaseDateTextView.append(movieInfo.getRelease_date());
                 ratingTextView.append(movieInfo.getVote_average());
                 overviewTextView.setText(movieInfo.getOverview());
+
+                showTrailers();
             }
+        }
+    }
+    public MovieInfo getMovieInfoRefrance(){
+        return movieInfo;
+    }
+
+    //TODO need to created an appropriate number of text views with the trailer names
+    public void showTrailers() {
+        //no data in class?Download it
+        if (movieInfo.getTrailers().isEmpty()) {
+            loadTrailerData(movieInfo.getId());
+        }
+
+        List<String> names = new ArrayList<String>();
+        List<String> keys = new ArrayList<String>();
+
+        for(TrailerInfo trailer : movieInfo.getTrailers()){
+            names.add(trailer.getName());
+            keys.add(trailer.getKey());
+
+        }
+        Log.v(TAG,  names.toString());
+        ListView view = (ListView) findViewById(R.id.lv_movie_details_trailers);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
+        view.setAdapter(arrayAdapter);
+
+
+
+
+    }
+
+    //TODO set up an error text view;
+    public void showError(){
+
+    }
+    private void loadTrailerData(String id){
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(NetworkUtil.ExtraData.ID_KEY, id);
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<TrailerInfo[]> trailerSearch = loaderManager.getLoader(TRAILER_LOADER);
+        if (trailerSearch == null) {
+            loaderManager.initLoader(TRAILER_LOADER, queryBundle, new FetchMovieTrailers(this));
+        } else {
+            loaderManager.restartLoader(TRAILER_LOADER, queryBundle, new FetchMovieTrailers(this));
         }
     }
 }

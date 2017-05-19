@@ -18,19 +18,31 @@ public final class NetworkUtil {
 
     //Replace the api key with your key.
     //com.redsparkdev.moviestalker.API_KEY will not be available
+    private final static String TAG = NetworkUtil.class.getSimpleName().toString();
+
     private static final String API_KEY = com.redsparkdev.moviestalker.API_KEY.KEY;
 
     private static final String BASE_URL = "https://api.themoviedb.org/3";
     private static final String API_PARAM = "api_key";
     private static final String TYPE = "movie";
+    private static final String VIDEOS = "videos";
 
+    public static URL buildTrailerListUrl(String id){
+        Uri buildUri = Uri.parse(BASE_URL).buildUpon()
+                .appendPath(TYPE)
+                .appendPath(id)
+                .appendPath(VIDEOS)
+                .appendQueryParameter(API_PARAM, API_KEY)
+                .build();
+        Log.v(TAG, buildUri.toString());
+        return UrlBuild(buildUri);
+    }
     public static URL buildUrl(String sortBy){
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                 .appendPath(TYPE)
                 .appendPath(sortBy)
                 .appendQueryParameter(API_PARAM, API_KEY)
                 .build();
-        Log.v("TAG", builtUri.toString());
         return UrlBuild(builtUri);
     }
     public static URL buildImgUrl(String imgPath, String imgSize){
@@ -54,6 +66,7 @@ public final class NetworkUtil {
         }
         return url;
     }
+
     /**
      * This method returns the entire result from the HTTP response.
      *
@@ -83,6 +96,11 @@ public final class NetworkUtil {
         public static final String KEY = "sortBy";
         public static final String TOP_RATED = "top_rated";
         public static final String POPULAR = "popular";
+    }
+    public static final class ExtraData{
+        public static final String ID_KEY = "id";
+        public static final String TRILERS = "videos";
+        public static final String REVIEWS = "reviews";
     }
     public static final class ImageSize{
         public static final String W92 = "w92";

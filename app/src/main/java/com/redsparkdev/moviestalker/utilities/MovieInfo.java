@@ -6,6 +6,7 @@ package com.redsparkdev.moviestalker.utilities;
  */
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class MovieInfo implements Serializable {
 
 
     //making them into empty string instead of null to prevent errors
+    private String id ="";
     private String full_poster_path="";
     private String poster_path ="";
     private String overview="";
@@ -28,11 +30,18 @@ public class MovieInfo implements Serializable {
     private String vote_count="";
     private String vote_average="";
 
-    private List<String> trailers;
-    private List<String> reviews;
+    private List<TrailerInfo> trailers = new ArrayList<>();
+    private List<String> reviews = new ArrayList<>();
 
 
     //Getters and setters
+    public void setId(String id){
+        this.id = id;
+    }
+    public String getId(){
+        return this.id;
+    }
+
     public String getPoster_path() {
         return poster_path;
     }
@@ -107,13 +116,15 @@ public class MovieInfo implements Serializable {
     public void clearTrilerList(){
         trailers.clear();
     }
-    public void setTrailers(String trilerJsom){
-        trailers.add(trilerJsom);
+    public void setTrailers(TrailerInfo trailer){
+        trailers.add(trailer);
     }
-    public List<String> getTrailers(){
+    public void setTrailers(TrailerInfo [] trailerArray){
+        for(TrailerInfo trailer : trailerArray){
+            this.trailers.add(trailer);
+        }
+    }
+    public List<TrailerInfo> getTrailers(){
         return trailers;
     }
-
-
-
 }

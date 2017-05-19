@@ -12,12 +12,44 @@ import org.json.JSONObject;
  */
 
 public final class MoviedbJsonUtil{
+    final static String TAG = MoviedbJsonUtil.class.getSimpleName();
+
+    final static String RESULTS = "results";
+
+    public static TrailerInfo[] getTrailerObjects(String trailerJsonString){
+
+        final String NAME = "name";
+        final String KEY = "key";
+        final String SITE = "site";
+
+        TrailerInfo[] trailers;
+        try{
+            JSONObject trailerJson = new JSONObject((trailerJsonString));
+            JSONArray trailerArray = trailerJson.getJSONArray(RESULTS);
+            trailers = new TrailerInfo[trailerArray.length()];
+            for(int i = 0; i < trailerArray.length(); i++) {
+                JSONObject trailerInfoJson = trailerArray.getJSONObject(i);
+
+                trailers[i] = new TrailerInfo();
+                trailers[i].setName(trailerInfoJson.getString(NAME));
+                trailers[i].setKey(trailerInfoJson.getString(KEY));
+                trailers[i].setSite(trailerInfoJson.getString(SITE));
+
+            }
+            return trailers;
+
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static MovieInfo[] getMovieObjects(String movieJsonString){
 
-        final String TAG = MoviedbJsonUtil.class.getSimpleName();
+
         //JSON keywords
+        final String ID = "id";
         final String STATUS_CODE = "status_code";//this indicates an error1
-        final String RESULTS = "results";
         final String POSTER_PATH = "poster_path";
         final String OVERVIEW = "overview";
         final String RELEASE_DATE= "release_date";
@@ -45,6 +77,7 @@ public final class MoviedbJsonUtil{
 
                 //Assigning the strings to the object
                 movies[i] = new MovieInfo();
+                movies[i].setId(movieInfoJson.getString(ID));
                 movies[i].setPoster_path(movieInfoJson.getString(POSTER_PATH));
                 movies[i].setTitle(movieInfoJson.getString(TITLE));
                 movies[i].setOverview(movieInfoJson.getString(OVERVIEW));

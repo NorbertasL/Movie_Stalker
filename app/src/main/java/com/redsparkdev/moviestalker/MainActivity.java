@@ -22,7 +22,7 @@ import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapterOnClickHandler{
 
-    private static final int GITHUB_SEARCH_LOADER = 1;
+    private static final int MOVIE_LIST_LOADER = 1;
 
 
     private RecyclerView recyclerView;
@@ -64,11 +64,11 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         queryBundle.putString(NetworkUtil.SortBy.KEY, sortBy);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(GITHUB_SEARCH_LOADER);
+        Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(MOVIE_LIST_LOADER);
         if (movieSearch == null) {
-            loaderManager.initLoader(GITHUB_SEARCH_LOADER, queryBundle, new FetchMovieData(this));
+            loaderManager.initLoader(MOVIE_LIST_LOADER, queryBundle, new FetchMovieData(this));
         } else {
-        loaderManager.restartLoader(GITHUB_SEARCH_LOADER, queryBundle, new FetchMovieData(this));
+        loaderManager.restartLoader(MOVIE_LIST_LOADER, queryBundle, new FetchMovieData(this));
     }
 }
 
