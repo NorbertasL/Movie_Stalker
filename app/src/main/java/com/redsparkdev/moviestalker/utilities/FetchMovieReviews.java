@@ -55,7 +55,7 @@ public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewIn
                 String id = args.getString(NetworkUtil.ExtraData.ID_KEY);
 
                 //requests a URL for the id
-                URL reviewListUrl = NetworkUtil.buildTrailerListUrl(id);
+                URL reviewListUrl = NetworkUtil.buildReviewListUrl(id);
                 try{
                     //gets the raw json
                     String jsonReviewListResponse = NetworkUtil.getResponseFromHttpUrl(reviewListUrl);
@@ -82,8 +82,8 @@ public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewIn
             //set the review to the appropriate movie.
             movieDetailActivity.getMovieInfoRefrance().setReviews(data);
 
-            //displayed the trailers
-            movieDetailActivity.loadReviews();
+            //displayed the reviews
+            movieDetailActivity.showReviews();
         }else{
             movieDetailActivity.showError();
 

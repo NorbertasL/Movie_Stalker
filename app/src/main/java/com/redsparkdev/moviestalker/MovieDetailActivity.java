@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.redsparkdev.moviestalker.storageObjects.ReviewInfo;
+import com.redsparkdev.moviestalker.utilities.FetchMovieReviews;
 import com.redsparkdev.moviestalker.utilities.FetchMovieTrailers;
 import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
@@ -21,7 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-
+//TODO fix duplication of Trailers and Reviews
 public class MovieDetailActivity extends AppCompatActivity {
     private final static String TAG = MovieDetailActivity.class.getSimpleName().toString();
     private ImageView imageImageView;
@@ -38,15 +40,27 @@ public class MovieDetailActivity extends AppCompatActivity {
     private static ArrayList<String> trailer_Name;
     private static ArrayList<String> trailer_Link;
 
-    private static ArrayList<TextView> trailerViews;
+    private static final String SAVE_AUTHOR_KEY = "author";
+    private static final String SAVE_CONTENT_KEY = "content";
+
+    private static ArrayList<String> reviews_Author;
+    private static ArrayList<String> review_Content;
+
+    private  ArrayList<TextView> trailerViews;
+    private  ArrayList<LinearLayout> reviewViews;
+
+
+
 
     private static final int TRAILER_LOADER = 2;
+    private static final int REVIEW_LOADER = 3;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         trailerViews = new ArrayList<>();
+        reviewViews = new ArrayList<>();
 
 
         setContentView(R.layout.activity_movie_detail);
@@ -69,24 +83,13 @@ public class MovieDetailActivity extends AppCompatActivity {
                 loadTrailerData(movieInfo.getId());
 
 
+
                 //gets the data from the movie object
                 Picasso.with(this).load(movieInfo.getFull_poster_path()).into(imageImageView);
                 titleTextView.setText(movieInfo.getOriginal_title());
                 releaseDateTextView.append(movieInfo.getRelease_date());
                 ratingTextView.append(movieInfo.getVote_average());
                 overviewTextView.setText(movieInfo.getOverview());
-
-                if (savedInstanceState != null) {
-                    if (savedInstanceState.containsKey(SAVE_NAME_KEY)) {
-                        trailer_Name = savedInstanceState.getStringArrayList(SAVE_NAME_KEY);
-                    }
-                    if (savedInstanceState.containsKey(SAVE_LINK_KEY)) {
-                        trailer_Link = savedInstanceState.getStringArrayList(SAVE_LINK_KEY);
-                    }
-                    showSaveTrailers();
-                } else {
-                    loadTrailers();
-                }
 
             }
         }
@@ -96,58 +99,45 @@ public class MovieDetailActivity extends AppCompatActivity {
         return movieInfo;
     }
 
-    public void showSaveTrailers() {
-        if (!trailer_Name.isEmpty() && trailer_Link.isEmpty()) {
-            String[] name = new String[trailer_Name.size()];
-            trailer_Name.toArray(name);
 
-            String[] link = new String[trailer_Name.size()];
-            trailer_Link.toArray(link);
 
-            for (int i = 0; i < name.length; i++) {
-                final TextView text_view = new TextView(this);
-                trailerViews.add(text_view);
+    public void showReviews(){
+        Log.v(TAG, ":showing reviews");
+        for(ReviewInfo review: movieInfo.getReviews()){
+            final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.review_list_item, null);
+            TextView autor = (TextView)layout.findViewById(R.id.tv_review_author);
+            TextView content = (TextView) layout.findViewById(R.id.tv_review_content);
+            reviewViews.add(layout);
+            autor.setText(review.getAuthor());
+            content.setText(review.getReview());
 
-                text_view.setText(name[i]);
-                text_view.setTag(link[i]);
+            mainLayout.addView(layout);
 
-                mainLayout.addView(text_view);
-                text_view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String link = text_view.getTag().toString();
-                        if (!link.isEmpty()) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(text_view.getTag().toString())));
-                        }
-                    }
-                });
-
-            }
         }
-    }
 
-    public void loadReviews(){
-        //TODO write loadReviews code
+
     }
 
     //DONE TO-DO need to created an appropriate number of text views with the trailer names
-    public void loadTrailers() {
+    public void showTrailers() {
 
         final String TYPE_VIDEO = "Trailer";
 
-        trailer_Name = new ArrayList<>();
-        trailer_Link = new ArrayList<>();
+        //trailer_Name = new ArrayList<>();
+       // trailer_Link = new ArrayList<>();
 
         for (final TrailerInfo trailer : movieInfo.getTrailers()) {
             //For now only interested in trailers
             if (trailer.getType().equalsIgnoreCase(TYPE_VIDEO)) {
                 trailer.setLink(NetworkUtil.buildTrailerVideoUrl(trailer.getKey()));
-                final TextView text_view = new TextView(this);
+                final TextView text_view = (TextView) View.inflate(this, R.layout.trailer_list_item, null) ;
                 trailerViews.add(text_view);
+
 
                 text_view.setText(trailer.getName());
                 text_view.setTag(trailer.getLink());
 
+                /** i find no need for this
                 if (!trailer.getName().isEmpty())
                     trailer_Name.add(trailer.getName());
                 else
@@ -157,6 +147,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 else
                     trailer_Link.add("no link");
 
+                 **/
                 mainLayout.addView(text_view);
                 text_view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -169,33 +160,23 @@ public class MovieDetailActivity extends AppCompatActivity {
                 });
             }
         }
+        //Making sure review load after the trailers :).
+        loadReviewData(movieInfo.getId());
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Log.v(TAG, "Save State");
-        super.onSaveInstanceState(outState);
-        outState.putStringArrayList(SAVE_NAME_KEY, trailer_Name);
-        outState.putStringArrayList(SAVE_LINK_KEY, trailer_Link);
-        for(TextView view: trailerViews){
-            mainLayout.removeView(view);
-        }
-
-
-    }
 
     //TODO set up an error text view;
     public void showError() {
 
     }
-
     //TODO set up loading indicator
     public void showLoadingIndicator() {
 
     }
 
     private void loadTrailerData(String id) {
+        Log.v(TAG, ":Loading Trailer data");
         Bundle queryBundle = new Bundle();
         queryBundle.putString(NetworkUtil.ExtraData.ID_KEY, id);
         LoaderManager loaderManager = getSupportLoaderManager();
@@ -204,6 +185,18 @@ public class MovieDetailActivity extends AppCompatActivity {
             loaderManager.initLoader(TRAILER_LOADER, queryBundle, new FetchMovieTrailers(this));
         } else {
             loaderManager.restartLoader(TRAILER_LOADER, queryBundle, new FetchMovieTrailers(this));
+        }
+    }
+    private void loadReviewData(String id){
+        Log.v(TAG, ":Loading review data");
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(NetworkUtil.ExtraData.ID_KEY, id);
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<ReviewInfo[]> reviewSearch = loaderManager.getLoader(REVIEW_LOADER);
+        if(reviewSearch == null){
+            loaderManager.initLoader(REVIEW_LOADER, queryBundle, new FetchMovieReviews(this));
+        }else{
+            loaderManager.restartLoader(REVIEW_LOADER, queryBundle, new FetchMovieReviews(this));
         }
     }
 

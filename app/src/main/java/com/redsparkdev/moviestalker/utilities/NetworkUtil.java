@@ -26,7 +26,20 @@ public final class NetworkUtil {
     private static final String BASE_URL = "https://api.themoviedb.org/3";
     private static final String API_PARAM = "api_key";
     private static final String TYPE = "movie";
-    private static final String VIDEOS = "videos";
+
+    public static URL buildReviewListUrl(String id){
+        final String REVIEWS = "reviews";
+
+        Uri buildUri = Uri.parse(BASE_URL).buildUpon()
+                .appendPath(TYPE)
+                .appendPath(id)
+                .appendPath(REVIEWS)
+                .appendQueryParameter(API_PARAM, API_KEY)
+                .build();
+        Log.v(TAG, buildUri.toString());
+        return UrlBuild(buildUri);
+
+    }
 
     //Build URL for the youtube video link for the trailer
     public static URL buildTrailerVideoUrl(String key){
@@ -41,6 +54,8 @@ public final class NetworkUtil {
 
     //Build the URL for retrieves trailer list
     public static URL buildTrailerListUrl(String id){
+        final String VIDEOS = "videos";
+
         Uri buildUri = Uri.parse(BASE_URL).buildUpon()
                 .appendPath(TYPE)
                 .appendPath(id)

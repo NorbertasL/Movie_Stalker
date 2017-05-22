@@ -83,7 +83,7 @@ public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<Trailer
             movieDetailActivity.getMovieInfoRefrance().setTrailers(data);
 
             //displayed the trailers
-            movieDetailActivity.loadTrailers();
+            movieDetailActivity.showTrailers();
         }else{
             movieDetailActivity.showError();
 

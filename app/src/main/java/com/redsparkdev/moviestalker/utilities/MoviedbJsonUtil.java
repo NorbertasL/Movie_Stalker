@@ -25,6 +25,7 @@ public final class MoviedbJsonUtil{
     public static ReviewInfo[] getReviewObjects(String reviewJsonString){
         final String AUTHOR_KEY = "author";
         final String CONTENT_KEY = "content";
+        Log.v(TAG, ":RAW STRING:"+reviewJsonString);
 
         ReviewInfo[] reviews;
         try{
