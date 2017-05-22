@@ -3,13 +3,13 @@ package com.redsparkdev.moviestalker;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,9 +23,12 @@ import com.redsparkdev.moviestalker.storageObjects.TrailerInfo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity {
-    private final static String TAG = MovieDetailActivity.class.getSimpleName().toString();
+    private final static String TAG = MovieDetailActivity.class.getSimpleName();
+    private final boolean DEBUG = true;
+
     private ImageView imageImageView;
     private TextView titleTextView;
     private TextView releaseDateTextView;
@@ -34,21 +37,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     private LinearLayout mainLayout;
     private MovieInfo movieInfo;
 
-    /**
-     * private static final String SAVE_NAME_KEY = "name";
-     * private static final String SAVE_LINK_KEY = "link";
-     * <p>
-     * private static ArrayList<String> trailer_Name;
-     * private static ArrayList<String> trailer_Link;
-     * <p>
-     * private static final String SAVE_AUTHOR_KEY = "author";
-     * private static final String SAVE_CONTENT_KEY = "content";
-     * <p>
-     * private static ArrayList<String> reviews_Author;
-     * private static ArrayList<String> review_Content;
-     **/
     private static final String SAVE_TRAILERS_KEY = "trailers";
     private static final String SAVE_REVIEWS_KEY = "reviews";
+
+    private int reviewsToShow = 3;
 
 
     private ArrayList<TextView> trailerViews;
@@ -94,7 +86,8 @@ public class MovieDetailActivity extends AppCompatActivity {
 
 
                 if (savedInstanceState != null) {
-                    Log.v(TAG, ":savedInstanceState != null");
+                    if(DEBUG)
+                        Log.v(TAG, ":savedInstanceState != null");
                     if (savedInstanceState.getBoolean(SAVE_TRAILERS_KEY)) {
                         showTrailers();
                     } else {
@@ -107,7 +100,8 @@ public class MovieDetailActivity extends AppCompatActivity {
                         loadReviewData(movieInfo.getId());
                     }
                 } else {
-                    Log.v(TAG, ":savedInstanceState == null");
+                    if(DEBUG)
+                        Log.v(TAG, ":savedInstanceState == null");
                     loadTrailerData(movieInfo.getId());
                     loadReviewData(movieInfo.getId());
                 }
@@ -135,35 +129,77 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     }
 
-    public MovieInfo getMovieInfoRefrance() {
+    public MovieInfo getMovieInfoReference() {
         return movieInfo;
     }
 
 
     public void showReviews() {
-        Log.v(TAG, ":showing reviews");
-        for (ReviewInfo review : movieInfo.getReviews()) {
+        if(DEBUG)
+            Log.v(TAG, ":showing reviews");
+
+        if(!reviewViews.isEmpty()){
+            for (LinearLayout layout : reviewViews) {
+                mainLayout.removeView(layout);
+            }
+        }
+        List<ReviewInfo> reviewList = movieInfo.getReviews();
+        ReviewInfo [] reviewArray = new ReviewInfo[reviewList.size()];
+        reviewList.toArray(reviewArray);
+
+        if(reviewArray.length == 0){
+            return;
+        }
+        for(int i = 0; i < reviewsToShow && i < reviewArray.length ; i++){
             final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.review_list_item, null);
-            TextView autor = (TextView) layout.findViewById(R.id.tv_review_author);
+            TextView author = (TextView) layout.findViewById(R.id.tv_review_author);
             TextView content = (TextView) layout.findViewById(R.id.tv_review_content);
             reviewViews.add(layout);
-            autor.setText(review.getAuthor());
+            author.setText(reviewArray[i].getAuthor());
+            content.setText(reviewArray[i].getReview());
+
+            mainLayout.addView(layout);
+        }
+
+        //if the button is press it loads 3 more reviews
+        if(reviewsToShow < reviewArray.length){
+            final Button showMore = new Button(this);
+            showMore.setText("Show More Comments");
+
+            mainLayout.addView(showMore);
+            showMore.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    reviewsToShow+=3;
+                    showReviews();
+                    mainLayout.removeView(showMore);
+                }
+            });
+        }
+
+
+
+
+        /**
+        for (ReviewInfo review : movieInfo.getReviews()) {
+            final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.review_list_item, null);
+            TextView author = (TextView) layout.findViewById(R.id.tv_review_author);
+            TextView content = (TextView) layout.findViewById(R.id.tv_review_content);
+            reviewViews.add(layout);
+            author.setText(review.getAuthor());
             content.setText(review.getReview());
 
             mainLayout.addView(layout);
 
         }
+         **/
+
 
 
     }
 
-    //DONE TO-DO need to created an appropriate number of text views with the trailer names
     public void showTrailers() {
 
         final String TYPE_VIDEO = "Trailer";
-
-        //trailer_Name = new ArrayList<>();
-        // trailer_Link = new ArrayList<>();
 
         for (final TrailerInfo trailer : movieInfo.getTrailers()) {
             //For now only interested in trailers
@@ -172,21 +208,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                 final TextView text_view = (TextView) View.inflate(this, R.layout.trailer_list_item, null);
                 trailerViews.add(text_view);
 
-
                 text_view.setText(trailer.getName());
                 text_view.setTag(trailer.getLink());
 
-                /** i find no need for this
-                 if (!trailer.getName().isEmpty())
-                 trailer_Name.add(trailer.getName());
-                 else
-                 trailer_Name.add("Name not found");
-                 if (!trailer.getLink().toString().isEmpty())
-                 trailer_Link.add(trailer.getLink().toString());
-                 else
-                 trailer_Link.add("no link");
-
-                 **/
                 mainLayout.addView(text_view);
                 text_view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -226,34 +250,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         for (LinearLayout layout : reviewViews) {
             mainLayout.removeView(layout);
         }
-
-
-        /**
-         //Saving Trailer info
-         trailer_Name = new ArrayList<>();
-         trailer_Link = new ArrayList<>();
-         for(TextView view: trailerViews){
-         trailer_Name.add(view.getText().toString());
-         trailer_Link.add(view.getTag().toString());
-         }
-         outState.putStringArrayList(SAVE_NAME_KEY, trailer_Name);
-         outState.putStringArrayList(SAVE_LINK_KEY, trailer_Link);
-
-         //Saving comment info
-         reviews_Author = new ArrayList<>();
-         review_Content = new ArrayList<>();
-         for(LinearLayout layout: reviewViews){
-         TextView author = (TextView)layout.findViewById(R.id.tv_review_author);
-         reviews_Author.add(author.getText().toString());
-
-         TextView content = (TextView)layout.findViewById(R.id.tv_review_content);
-         review_Content.add(content.getText().toString());
-         }
-         outState.putStringArrayList(SAVE_AUTHOR_KEY, reviews_Author);
-         outState.putStringArrayList(SAVE_CONTENT_KEY, review_Content);
-         **/
-
-
     }
 
     //TODO set up an error text view;
@@ -267,7 +263,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void loadTrailerData(String id) {
-        Log.v(TAG, ":Loading Trailer data");
+        if(DEBUG)
+            Log.v(TAG, ":Loading Trailer data");
         Bundle queryBundle = new Bundle();
         queryBundle.putString(NetworkUtil.ExtraData.ID_KEY, id);
         LoaderManager loaderManager = getSupportLoaderManager();
@@ -280,7 +277,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void loadReviewData(String id) {
-        Log.v(TAG, ":Loading review data");
+        if(DEBUG)
+            Log.v(TAG, ":Loading review data");
         Bundle queryBundle = new Bundle();
         queryBundle.putString(NetworkUtil.ExtraData.ID_KEY, id);
         LoaderManager loaderManager = getSupportLoaderManager();

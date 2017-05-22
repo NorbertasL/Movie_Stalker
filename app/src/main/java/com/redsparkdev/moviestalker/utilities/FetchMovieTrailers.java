@@ -42,7 +42,7 @@ public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<Trailer
                     return;
                 }
                 //Clear the list so we don't have duplicates
-                movieDetailActivity.getMovieInfoRefrance().clearTrailerList();
+                movieDetailActivity.getMovieInfoReference().clearTrailerList();
                 //TODO create a loading indicator for data
 
                 //TODO Not sure why forceLoad() in needed.Find out
@@ -80,7 +80,7 @@ public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<Trailer
 
             Log.v(TAG, data.toString());
             //set the trailer to the appropriate movie.
-            movieDetailActivity.getMovieInfoRefrance().setTrailers(data);
+            movieDetailActivity.getMovieInfoReference().setTrailers(data);
 
             //displayed the trailers
             movieDetailActivity.showTrailers();
