@@ -5,9 +5,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.redsparkdev.moviestalker.utilities.FetchMovieTrailers;
@@ -26,18 +28,25 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView releaseDateTextView;
     private TextView ratingTextView;
     private TextView overviewTextView;
+    private LinearLayout mainLayout;
 
     private MovieInfo movieInfo;
 
     private static final int TRAILER_LOADER = 2;
+    private static final String LINK_KEY = "video_link";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_movie_detail);
 
+
+
         //setting ids
+        mainLayout = (LinearLayout)findViewById(R.id.main_movie_detail_layout);
         imageImageView = (ImageView)findViewById(R.id.iv_movie_details_image);
         titleTextView = (TextView)findViewById(R.id.tv_movie_details_title);
         releaseDateTextView = (TextView)findViewById(R.id.tv_movie_details_release_date);
@@ -74,18 +83,30 @@ public class MovieDetailActivity extends AppCompatActivity {
             loadTrailerData(movieInfo.getId());
         }
 
-        List<String> names = new ArrayList<String>();
-        List<String> keys = new ArrayList<String>();
+        //List<String> names = new ArrayList<String>();
+        //List<String> keys = new ArrayList<String>();
+
+        //List<TextView> tailer_text_view =  new ArrayList<>();
 
         for(TrailerInfo trailer : movieInfo.getTrailers()){
-            names.add(trailer.getName());
-            keys.add(trailer.getKey());
+
+            final TextView text_view = new TextView(this);
+            text_view.setText(trailer.getName());
+            text_view.setTag(trailer.getKey());
+            mainLayout.addView(text_view);
+
+
+            //names.add(trailer.getName());
+            //keys.add(trailer.getKey());
 
         }
-        Log.v(TAG,  names.toString());
+
+
+        /**
         ListView view = (ListView) findViewById(R.id.lv_movie_details_trailers);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
         view.setAdapter(arrayAdapter);
+         **/
 
 
 

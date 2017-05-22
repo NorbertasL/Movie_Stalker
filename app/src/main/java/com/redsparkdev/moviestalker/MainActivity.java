@@ -22,7 +22,8 @@ import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapterOnClickHandler{
 
-    private static final int MOVIE_LIST_LOADER = 1;
+    private static final int SEARCH_LOADER = 1;
+
 
 
     private RecyclerView recyclerView;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         myAdapter = new MyAdapter(this);
 
         recyclerView.setAdapter(myAdapter);
+
     }
 
     @Override
@@ -64,11 +66,11 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         queryBundle.putString(NetworkUtil.SortBy.KEY, sortBy);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(MOVIE_LIST_LOADER);
+        Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(SEARCH_LOADER);
         if (movieSearch == null) {
-            loaderManager.initLoader(MOVIE_LIST_LOADER, queryBundle, new FetchMovieData(this));
+            loaderManager.initLoader(SEARCH_LOADER, queryBundle, new FetchMovieData(this));
         } else {
-        loaderManager.restartLoader(MOVIE_LIST_LOADER, queryBundle, new FetchMovieData(this));
+        loaderManager.restartLoader(SEARCH_LOADER, queryBundle, new FetchMovieData(this));
     }
 }
 
@@ -104,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
                 R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
 
         //Listens for dropdown menu selections
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
