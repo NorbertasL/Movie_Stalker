@@ -23,8 +23,26 @@ public final class MoviedbJsonUtil{
 
 
     public static ReviewInfo[] getReviewObjects(String reviewJsonString){
+        final String AUTHOR_KEY = "author";
+        final String CONTENT_KEY = "content";
+
+        ReviewInfo[] reviews;
+        try{
+            JSONObject reviewJson = new JSONObject(reviewJsonString);
+            JSONArray reviewArray = reviewJson.getJSONArray(RESULTS);
+            reviews = new ReviewInfo[reviewArray.length()];
+            for(int i = 0; i<reviewArray.length(); i++){
+                JSONObject reviewInfoJson = reviewArray.getJSONObject(i);
+
+                reviews[i] = new ReviewInfo(reviewInfoJson.getString(AUTHOR_KEY), reviewInfoJson.getString(CONTENT_KEY));
+
+            }
+            return reviews;
+
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
         return null;
-        //TODO write getReviewObjects code
     }
 
     public static TrailerInfo[] getTrailerObjects(String trailerJsonString){
@@ -36,7 +54,7 @@ public final class MoviedbJsonUtil{
 
         TrailerInfo[] trailers;
         try{
-            JSONObject trailerJson = new JSONObject((trailerJsonString));
+            JSONObject trailerJson = new JSONObject(trailerJsonString);
             JSONArray trailerArray = trailerJson.getJSONArray(RESULTS);
             trailers = new TrailerInfo[trailerArray.length()];
             for(int i = 0; i < trailerArray.length(); i++) {
