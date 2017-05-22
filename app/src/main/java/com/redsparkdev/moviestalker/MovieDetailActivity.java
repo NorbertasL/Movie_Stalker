@@ -157,7 +157,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             reviewViews.add(layout);
             author.setText(reviewArray[i].getAuthor());
             content.setText(reviewArray[i].getReview());
-
             mainLayout.addView(layout);
         }
 
@@ -201,17 +200,20 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         final String TYPE_VIDEO = "Trailer";
 
+        LinearLayout trailerField = (LinearLayout) findViewById(R.id.ll_for_trailers);
         for (final TrailerInfo trailer : movieInfo.getTrailers()) {
             //For now only interested in trailers
             if (trailer.getType().equalsIgnoreCase(TYPE_VIDEO)) {
                 trailer.setLink(NetworkUtil.buildTrailerVideoUrl(trailer.getKey()));
                 final TextView text_view = (TextView) View.inflate(this, R.layout.trailer_list_item, null);
+
                 trailerViews.add(text_view);
 
                 text_view.setText(trailer.getName());
                 text_view.setTag(trailer.getLink());
 
-                mainLayout.addView(text_view);
+                trailerField.addView(text_view);
+                //mainLayout.addView(text_view);
                 text_view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
