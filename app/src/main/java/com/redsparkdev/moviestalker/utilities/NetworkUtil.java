@@ -18,6 +18,7 @@ public final class NetworkUtil {
 
     //Replace the api key with your key.
     //com.redsparkdev.moviestalker.API_KEY will not be available
+    //TODO add your API key
     private final static String TAG = NetworkUtil.class.getSimpleName().toString();
 
     private static final String API_KEY = com.redsparkdev.moviestalker.API_KEY.KEY;
@@ -27,6 +28,18 @@ public final class NetworkUtil {
     private static final String TYPE = "movie";
     private static final String VIDEOS = "videos";
 
+    //Build URL for the youtube video link for the trailer
+    public static URL buildTrailerVideoUrl(String key){
+        final String BASE = "https://www.youtube.com/watch";
+        final String PAR = "v";
+        Uri buildUri = Uri.parse(BASE).buildUpon()
+                .appendQueryParameter(PAR, key)
+                .build();
+        Log.v(TAG, buildUri.toString());
+        return UrlBuild(buildUri);
+    }
+
+    //Build the URL for retrieves trailer list
     public static URL buildTrailerListUrl(String id){
         Uri buildUri = Uri.parse(BASE_URL).buildUpon()
                 .appendPath(TYPE)

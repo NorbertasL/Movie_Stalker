@@ -1,17 +1,22 @@
 package com.redsparkdev.moviestalker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.redsparkdev.moviestalker.utilities.FetchMovieTrailers;
 import com.redsparkdev.moviestalker.utilities.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
@@ -23,6 +28,7 @@ import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity {
     private final static String TAG = MovieDetailActivity.class.getSimpleName().toString();
+    Context context = this.getBaseContext();
     private ImageView imageImageView;
     private TextView titleTextView;
     private TextView releaseDateTextView;
@@ -33,7 +39,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private MovieInfo movieInfo;
 
     private static final int TRAILER_LOADER = 2;
-    private static final String LINK_KEY = "video_link";
+    private static final int LINK_KEY = 531;
 
 
     @Override
@@ -88,12 +94,20 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         //List<TextView> tailer_text_view =  new ArrayList<>();
 
-        for(TrailerInfo trailer : movieInfo.getTrailers()){
-
+        //TODO FIX DUPLICAT VIEW THAT APPEARE AFTER RECREATING ACTIVITY
+        for(final TrailerInfo trailer : movieInfo.getTrailers()){
+            trailer.setLink(NetworkUtil.buildTrailerVideoUrl(trailer.getKey()));
             final TextView text_view = new TextView(this);
             text_view.setText(trailer.getName());
-            text_view.setTag(trailer.getKey());
+            text_view.setTag(trailer.getLink());
             mainLayout.addView(text_view);
+            text_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(trailer.getLink().toString())));
+                }
+            });
+
 
 
             //names.add(trailer.getName());
