@@ -1,6 +1,11 @@
 package com.redsparkdev.moviestalker.utilities;
 
 import android.util.Log;
+
+import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
+import com.redsparkdev.moviestalker.storageObjects.ReviewInfo;
+import com.redsparkdev.moviestalker.storageObjects.TrailerInfo;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,11 +21,18 @@ public final class MoviedbJsonUtil{
 
     final static String RESULTS = "results";
 
+
+    public static ReviewInfo[] getReviewObjects(String reviewJsonString){
+        return null;
+        //TODO write getReviewObjects code
+    }
+
     public static TrailerInfo[] getTrailerObjects(String trailerJsonString){
 
-        final String NAME = "name";
-        final String KEY = "key";
-        final String SITE = "site";
+        final String NAME_KEY = "name";
+        final String KEY_KEY = "key";
+        final String SITE_KEY = "site";
+        final String TYPE_KEY = "type";
 
         TrailerInfo[] trailers;
         try{
@@ -31,9 +43,13 @@ public final class MoviedbJsonUtil{
                 JSONObject trailerInfoJson = trailerArray.getJSONObject(i);
 
                 trailers[i] = new TrailerInfo();
-                trailers[i].setName(trailerInfoJson.getString(NAME));
-                trailers[i].setKey(trailerInfoJson.getString(KEY));
-                trailers[i].setSite(trailerInfoJson.getString(SITE));
+                trailers[i].setName(trailerInfoJson.getString(NAME_KEY));
+                trailers[i].setKey(trailerInfoJson.getString(KEY_KEY));
+                trailers[i].setSite(trailerInfoJson.getString(SITE_KEY));
+                trailers[i].setType(trailerInfoJson.getString(TYPE_KEY));
+
+
+
 
             }
             return trailers;

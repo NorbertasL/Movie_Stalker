@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.redsparkdev.moviestalker.utilities.FetchMovieData;
-import com.redsparkdev.moviestalker.utilities.MovieInfo;
+import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapterOnClickHandler{

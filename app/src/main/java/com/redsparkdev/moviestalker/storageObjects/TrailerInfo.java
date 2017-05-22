@@ -1,4 +1,4 @@
-package com.redsparkdev.moviestalker.utilities;
+package com.redsparkdev.moviestalker.storageObjects;
 
 import java.net.URL;
 
@@ -9,6 +9,7 @@ public class TrailerInfo {
     private String name = "";
     private String key = "";
     private String site = "";
+    private String type = "";
     private URL link;
 
     public String getName() {
@@ -35,6 +36,12 @@ public class TrailerInfo {
         this.site = site;
     }
 
+    public void setType(String type){
+        this.type =  type;
+    }
+    public String getType(){
+        return type;
+    }
     public void setLink(URL url){
         link = url;
     }

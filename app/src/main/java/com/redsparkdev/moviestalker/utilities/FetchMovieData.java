@@ -1,12 +1,13 @@
 package com.redsparkdev.moviestalker.utilities;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 
 import com.redsparkdev.moviestalker.MainActivity;
+import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
+
 import java.io.IOException;
 import java.net.URL;
 

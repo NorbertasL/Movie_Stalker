@@ -1,4 +1,4 @@
-package com.redsparkdev.moviestalker.utilities;
+package com.redsparkdev.moviestalker.storageObjects;
 
 /**
  * Created by Red on 30/04/2017.
@@ -31,7 +31,7 @@ public class MovieInfo implements Serializable {
     private String vote_average="";
 
     private List<TrailerInfo> trailers = new ArrayList<>();
-    private List<String> reviews = new ArrayList<>();
+    private List<ReviewInfo> reviews = new ArrayList<>();
 
 
     //Getters and setters
@@ -113,12 +113,10 @@ public class MovieInfo implements Serializable {
         this.original_title = original_title;
     }
 
-    public void clearTrilerList(){
+    public void clearTrailerList(){
         trailers.clear();
     }
-    public void setTrailers(TrailerInfo trailer){
-        trailers.add(trailer);
-    }
+
     public void setTrailers(TrailerInfo [] trailerArray){
         for(TrailerInfo trailer : trailerArray){
             this.trailers.add(trailer);
@@ -126,5 +124,18 @@ public class MovieInfo implements Serializable {
     }
     public List<TrailerInfo> getTrailers(){
         return trailers;
+    }
+
+    public void clearReviewList(){
+        trailers.clear();
+    }
+
+    public void setReviews(ReviewInfo[] reviews){
+        for (ReviewInfo review: reviews){
+            this.reviews.add(review);
+        }
+    }
+    public List<ReviewInfo> getReviews(){
+        return reviews;
     }
 }

@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.redsparkdev.moviestalker.utilities.MovieInfo;
+import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 import com.squareup.picasso.Picasso;
 
