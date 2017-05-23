@@ -23,7 +23,6 @@ public class FavListContract {
         // Since TaskEntry implements the interface "BaseColumns", it has an automatically produced
         // "_ID" column in addition to the two below
         public static final String COLUMN_MOVIE_ID = "movieID";
-        public static final String COLUMN_PRIORITY = "priority";
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_RELEASE_DATE = "releaseDate";
         public static final String COLUMN_RATING = "rating";
