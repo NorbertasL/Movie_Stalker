@@ -174,26 +174,6 @@ public class MovieDetailActivity extends AppCompatActivity {
                 }
             });
         }
-
-
-
-
-        /**
-        for (ReviewInfo review : movieInfo.getReviews()) {
-            final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.review_list_item, null);
-            TextView author = (TextView) layout.findViewById(R.id.tv_review_author);
-            TextView content = (TextView) layout.findViewById(R.id.tv_review_content);
-            reviewViews.add(layout);
-            author.setText(review.getAuthor());
-            content.setText(review.getReview());
-
-            mainLayout.addView(layout);
-
-        }
-         **/
-
-
-
     }
 
     public void showTrailers() {
