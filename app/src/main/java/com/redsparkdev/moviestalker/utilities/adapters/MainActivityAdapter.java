@@ -1,4 +1,4 @@
-package com.redsparkdev.moviestalker;
+package com.redsparkdev.moviestalker.utilities.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.redsparkdev.moviestalker.R;
 import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 import com.squareup.picasso.Picasso;
@@ -14,7 +16,7 @@ import com.squareup.picasso.Picasso;
  * Created by Red on 30/04/2017.
  */
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolder> {
+public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.AdapterViewHolder> {
 
     //Stores all the movie data(not images)
     private MovieInfo[] movieData;
@@ -25,23 +27,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
         void onClick(MovieInfo movieInfoObject);
     }
 
-    public MyAdapter(MyAdapterOnClickHandler clickHandler){
+    public MainActivityAdapter(MyAdapterOnClickHandler clickHandler){
         this.clickHandler = clickHandler;
     }
 
     @Override
-    public MyAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         int layoutID = R.layout.movie_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(layoutID, parent, shouldAttachToParentImmediately);
-        return new MyAdapterViewHolder(view);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MyAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(AdapterViewHolder holder, int position) {
         String thisMoviesPosterPath = movieData[position].getPoster_path();
         String imgUrl = NetworkUtil.buildImgUrl(thisMoviesPosterPath, NetworkUtil.ImageSize.W185).toString();
         movieData[position].setFull_poster_path(imgUrl);
@@ -55,10 +57,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdapterViewHolde
             return 0;
         return movieData.length;
     }
-    public class MyAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class AdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final ImageView movieImageView;
         private final View holderView;
-        private MyAdapterViewHolder(View view) {
+        private AdapterViewHolder(View view) {
             super(view);
             holderView = view;
             movieImageView = (ImageView) view.findViewById(R.id.image_thumbnail);

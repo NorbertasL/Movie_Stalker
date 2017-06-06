@@ -1,4 +1,4 @@
-package com.redsparkdev.moviestalker.utilities;
+package com.redsparkdev.moviestalker.utilities.loaders.network;
 
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -7,6 +7,8 @@ import android.support.v4.content.Loader;
 
 import com.redsparkdev.moviestalker.MainActivity;
 import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
+import com.redsparkdev.moviestalker.utilities.MoviedbJsonUtil;
+import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 
 import java.io.IOException;
 import java.net.URL;

@@ -12,8 +12,8 @@ import com.redsparkdev.moviestalker.data.FavListContract.FavEntry;
 
 public class FavDbHelper extends SQLiteOpenHelper{
 
-    private static final String DATABASE_NAME = "favorites.db";
-    private static final int VERSION = 1;
+    private static final String DATABASE_NAME = "favoritesDb.db";
+    private static final int VERSION = 3;
 
 
     FavDbHelper(Context context) {
@@ -24,13 +24,13 @@ public class FavDbHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         final String CREATE_TABLE = "CREATE TABLE "  + FavEntry.TABLE_NAME + " (" +
                 FavEntry._ID                + " INTEGER PRIMARY KEY, " +
-                FavEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-                FavEntry.COLUMN_TITLE    + " TEXT NOT NULL " +
-                FavEntry.COLUMN_RELEASE_DATE + "TEXT NOT NULL "+
-                FavEntry.COLUMN_RATING + "TEXT NOT NULL "+
-                FavEntry.COLUMN_OVERVIEW + "TEXT NOT NULL "+
-                FavEntry.COLUMN_IMAGE + "TEXT NOT NULL);";//this will prob be a bit map for the image
-                //TODO image colum will porob be a bit map
+                FavEntry.COLUMN_MOVIE_ID + " TEXT, " +
+                FavEntry.COLUMN_TITLE    + " TEXT, " +
+                FavEntry.COLUMN_RELEASE_DATE + " TEXT, "+
+                FavEntry.COLUMN_RATING + " TEXT, "+
+                FavEntry.COLUMN_OVERVIEW + " TEXT);";
+                //TODO figure out how tro save images
+
 
         db.execSQL(CREATE_TABLE);
 

@@ -120,26 +120,6 @@ public final class NetworkUtil {
             urlConnection.disconnect();
         }
     }
-    public static final class SortBy {
-        public static final String KEY = "sortBy";
-        public static final String TOP_RATED = "top_rated";
-        public static final String POPULAR = "popular";
-    }
-    public static final class ExtraData{
-        public static final String ID_KEY = "id";
-        public static final String TRILERS = "videos";
-        public static final String REVIEWS = "reviews";
-    }
-    public static final class ImageSize{
-        public static final String W92 = "w92";
-        public static final String W154 = "w154";
-        public static final String W185 = "w185";
-        public static final String W342 = "w342";
-        public static final String W500 = "w500";
-        public static final String W780 = "w780";
-        public static final String ORIGINAL = "original";
 
-
-    }
 
 }

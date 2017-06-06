@@ -1,6 +1,7 @@
 package com.redsparkdev.moviestalker;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
@@ -13,10 +14,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.redsparkdev.moviestalker.data.FavListContract;
+import com.redsparkdev.moviestalker.storageObjects.Constants;
 import com.redsparkdev.moviestalker.storageObjects.ReviewInfo;
-import com.redsparkdev.moviestalker.utilities.FetchMovieReviews;
-import com.redsparkdev.moviestalker.utilities.FetchMovieTrailers;
+import com.redsparkdev.moviestalker.utilities.loaders.network.FetchMovieReviews;
+import com.redsparkdev.moviestalker.utilities.loaders.network.FetchMovieTrailers;
 import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 import com.redsparkdev.moviestalker.storageObjects.TrailerInfo;
@@ -36,6 +40,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView overviewTextView;
     private LinearLayout mainLayout;
     private MovieInfo movieInfo;
+
+    private Button favButton;
 
     private static final String SAVE_TRAILERS_KEY = "trailers";
     private static final String SAVE_REVIEWS_KEY = "reviews";
@@ -68,6 +74,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         releaseDateTextView = (TextView) findViewById(R.id.tv_movie_details_release_date);
         ratingTextView = (TextView) findViewById(R.id.tv_movie_details_rating);
         overviewTextView = (TextView) findViewById(R.id.tv_movie_details_overview);
+        favButton = (Button) findViewById(R.id.button_fav);
+
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToFav();
+            }
+        });
 
         Intent parentActivity = getIntent();
 
@@ -248,7 +262,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         if(DEBUG)
             Log.v(TAG, ":Loading Trailer data");
         Bundle queryBundle = new Bundle();
-        queryBundle.putString(NetworkUtil.ExtraData.ID_KEY, id);
+        queryBundle.putString(Constants.ExtraData.ID_KEY, id);
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<TrailerInfo[]> trailerSearch = loaderManager.getLoader(TRAILER_LOADER);
         if (trailerSearch == null) {
@@ -262,7 +276,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         if(DEBUG)
             Log.v(TAG, ":Loading review data");
         Bundle queryBundle = new Bundle();
-        queryBundle.putString(NetworkUtil.ExtraData.ID_KEY, id);
+        queryBundle.putString(Constants.ExtraData.ID_KEY, id);
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<ReviewInfo[]> reviewSearch = loaderManager.getLoader(REVIEW_LOADER);
         if (reviewSearch == null) {
@@ -270,6 +284,24 @@ public class MovieDetailActivity extends AppCompatActivity {
         } else {
             loaderManager.restartLoader(REVIEW_LOADER, queryBundle, new FetchMovieReviews(this));
         }
+    }
+
+    private void addToFav(){
+        // TODO (7) Insert new task data via a ContentResolver
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FavListContract.FavEntry.COLUMN_MOVIE_ID, movieInfo.getId());
+        contentValues.put(FavListContract.FavEntry.COLUMN_OVERVIEW, movieInfo.getOverview());
+        contentValues.put(FavListContract.FavEntry.COLUMN_RATING, movieInfo.getPopularity());
+        contentValues.put(FavListContract.FavEntry.COLUMN_RELEASE_DATE, movieInfo.getRelease_date());
+        contentValues.put(FavListContract.FavEntry.COLUMN_TITLE, movieInfo.getTitle());
+        Uri uri = getContentResolver().insert(FavListContract.FavEntry.CONTENT_URI, contentValues);
+
+        if(uri != null){
+            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        }
+        // [Hint] Don't forget to call finish() to return to MainActivity after this insert is complete
+        finish();
+
     }
 
 }

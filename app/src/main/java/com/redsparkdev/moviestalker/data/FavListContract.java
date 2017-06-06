@@ -26,7 +26,6 @@ public class FavListContract {
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_RELEASE_DATE = "releaseDate";
         public static final String COLUMN_RATING = "rating";
-        public static final String COLUMN_IMAGE = "image";
         public static final String COLUMN_OVERVIEW = "overview";
 
 

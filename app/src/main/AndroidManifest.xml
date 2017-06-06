@@ -24,9 +24,16 @@
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"
-                />
-            </activity>
+                android:value=".MainActivity" />
+        </activity>
+
+        <provider
+            android:name=".data.FavContentProvider"
+            android:authorities="com.redsparkdev.moviestalker"
+            android:exported="false" />
+
+        <activity android:name=".FavActivity" />
+        <activity android:name=".FavDetailActivity"></activity>
     </application>
 
 </manifest>

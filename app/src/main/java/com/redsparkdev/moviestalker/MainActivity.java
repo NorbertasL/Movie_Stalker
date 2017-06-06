@@ -16,20 +16,22 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import com.redsparkdev.moviestalker.utilities.FetchMovieData;
+
+import com.redsparkdev.moviestalker.storageObjects.Constants;
+import com.redsparkdev.moviestalker.utilities.adapters.MainActivityAdapter;
+import com.redsparkdev.moviestalker.utilities.loaders.network.FetchMovieData;
 import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 
-public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapterOnClickHandler{
+public class MainActivity extends AppCompatActivity implements MainActivityAdapter.MyAdapterOnClickHandler{
 
-    private static final int SEARCH_LOADER = 1;
 
 
 
     private RecyclerView recyclerView;
     private TextView errorMessageDisplay;
     private ProgressBar loadingIndicator;
-    private MyAdapter myAdapter;
+    private MainActivityAdapter mainActivityAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +50,9 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        myAdapter = new MyAdapter(this);
+        mainActivityAdapter = new MainActivityAdapter(this);
 
-        recyclerView.setAdapter(myAdapter);
+        recyclerView.setAdapter(mainActivityAdapter);
 
     }
 
@@ -63,16 +65,17 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
     }
     private void  loadMovieData(String sortBy){
         Bundle queryBundle = new Bundle();
-        queryBundle.putString(NetworkUtil.SortBy.KEY, sortBy);
+        queryBundle.putString(Constants.SortOrder.KEY, sortBy);
 
         LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(SEARCH_LOADER);
+        Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(Constants.LoaderID.MainActivity_LOADER_ID);
         if (movieSearch == null) {
-            loaderManager.initLoader(SEARCH_LOADER, queryBundle, new FetchMovieData(this));
+            loaderManager.initLoader(Constants.LoaderID.MainActivity_LOADER_ID, queryBundle, new FetchMovieData(this));
         } else {
-        loaderManager.restartLoader(SEARCH_LOADER, queryBundle, new FetchMovieData(this));
+            loaderManager.restartLoader(Constants.LoaderID.MainActivity_LOADER_ID, queryBundle, new FetchMovieData(this));
+        }
     }
-}
+
 
     //Methods to manage views
     public void showLoadingIndicator(){
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
 
 
     public void setMovieData(MovieInfo[] movieData){
-        myAdapter.setMovieData(movieData);
+        mainActivityAdapter.setMovieData(movieData);
     }
 
     @Override
@@ -112,9 +115,9 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 if(selectedItem.equals(getString(R.string.sortBy_most_popular))){
-                    loadMovieData(NetworkUtil.SortBy.POPULAR);
+                    loadMovieData(Constants.SortOrder.POPULAR);
                 }else if(selectedItem.equals(getString(R.string.sortBy_highest_rated))){
-                    loadMovieData(NetworkUtil.SortBy.TOP_RATED);
+                    loadMovieData(Constants.SortOrder.TOP_RATED);
                 }
 
 
@@ -123,5 +126,17 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.MyAdapt
             }
         });
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.menu_item_fav){
+            startActivity(new Intent(this, FavActivity.class));
+
+        }
+
+        return super.onOptionsItemSelected(item);
+
     }
 }
