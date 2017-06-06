@@ -6,6 +6,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 
 import com.redsparkdev.moviestalker.MainActivity;
+import com.redsparkdev.moviestalker.storageObjects.Constants;
 import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.MoviedbJsonUtil;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
@@ -44,7 +45,7 @@ public class FetchMovieData implements LoaderManager.LoaderCallbacks<MovieInfo[]
 
             @Override
             public MovieInfo[] loadInBackground() {
-                String sortBy = args.getString(NetworkUtil.SortBy.KEY);
+                String sortBy = args.getString(Constants.SortOrder.KEY);
                 URL movieRequestUrl = NetworkUtil.buildUrl(sortBy);
                 try{
                     String jsonMovieResponse = NetworkUtil.getResponseFromHttpUrl(movieRequestUrl);

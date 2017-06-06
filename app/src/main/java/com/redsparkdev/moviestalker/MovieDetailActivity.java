@@ -291,7 +291,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FavListContract.FavEntry.COLUMN_MOVIE_ID, movieInfo.getId());
         contentValues.put(FavListContract.FavEntry.COLUMN_OVERVIEW, movieInfo.getOverview());
-        contentValues.put(FavListContract.FavEntry.COLUMN_RATING, movieInfo.getPopularity());
+        contentValues.put(FavListContract.FavEntry.COLUMN_RATING, movieInfo.getVote_average());
         contentValues.put(FavListContract.FavEntry.COLUMN_RELEASE_DATE, movieInfo.getRelease_date());
         contentValues.put(FavListContract.FavEntry.COLUMN_TITLE, movieInfo.getTitle());
         Uri uri = getContentResolver().insert(FavListContract.FavEntry.CONTENT_URI, contentValues);

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.redsparkdev.moviestalker.R;
+import com.redsparkdev.moviestalker.storageObjects.Constants;
 import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 import com.squareup.picasso.Picasso;
@@ -45,7 +46,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     @Override
     public void onBindViewHolder(AdapterViewHolder holder, int position) {
         String thisMoviesPosterPath = movieData[position].getPoster_path();
-        String imgUrl = NetworkUtil.buildImgUrl(thisMoviesPosterPath, NetworkUtil.ImageSize.W185).toString();
+        String imgUrl = NetworkUtil.buildImgUrl(thisMoviesPosterPath, Constants.ImageSize.W185).toString();
         movieData[position].setFull_poster_path(imgUrl);
         //Using Picasso to handle the image
         Picasso.with(holder.holderView.getContext()).load(imgUrl).into(holder.movieImageView);

@@ -96,9 +96,11 @@ public class FetchFavDetails implements LoaderManager.LoaderCallbacks<Cursor> {
             myDebugPrint(data.toString());
             String title = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_TITLE));
             String overview = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_OVERVIEW));
+            String rating = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_RATING));
+            String releaseDate = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_RELEASE_DATE));
             myDebugPrint("Title:" + title);
             myDebugPrint("Overview:" + overview);
-            activity.setData(title, overview);
+            activity.setData(title, overview, releaseDate, rating);
 
         }
 

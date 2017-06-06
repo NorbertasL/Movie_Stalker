@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.redsparkdev.moviestalker.MovieDetailActivity;
+import com.redsparkdev.moviestalker.storageObjects.Constants;
 import com.redsparkdev.moviestalker.storageObjects.ReviewInfo;
 import com.redsparkdev.moviestalker.utilities.MoviedbJsonUtil;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
@@ -53,7 +54,7 @@ public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewIn
             @Override
             public ReviewInfo [] loadInBackground() {
                 //gets the id and stores in in a string
-                String id = args.getString(NetworkUtil.ExtraData.ID_KEY);
+                String id = args.getString(Constants.ExtraData.ID_KEY);
 
                 //requests a URL for the id
                 URL reviewListUrl = NetworkUtil.buildReviewListUrl(id);
