@@ -60,7 +60,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(TAG, "onCreate");
         trailerViews = new ArrayList<>();
         reviewViews = new ArrayList<>();
 
@@ -117,7 +116,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         if(reviewViews.size() > 0){
             return;
         }
-        Log.v(TAG, ":showing reviews");
 
         List<ReviewInfo> reviewList = movieInfo.getReviews();
         ReviewInfo [] reviewArray = new ReviewInfo[reviewList.size()];
@@ -156,7 +154,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         if(trailerViews.size() > 0){
             return;
         }
-        Log.v(TAG, ":showTrailers");
 
         final String TYPE_VIDEO = "Trailer";
 
@@ -196,7 +193,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v(TAG, "onDestroy");
     }
 
     //TODO set up an error text view;
@@ -224,7 +220,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void loadTrailerData(String id) {
-        Log.v(TAG, ":Loading Trailer data");
 
         Bundle queryBundle = new Bundle();
         queryBundle.putString(Constants.ExtraData.ID_KEY, id);
@@ -238,7 +233,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void loadReviewData(String id) {
-        Log.v(TAG, ":Loading review data");
 
         Bundle queryBundle = new Bundle();
         queryBundle.putString(Constants.ExtraData.ID_KEY, id);
@@ -252,7 +246,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void addToFav(){
-        // TODO (7) Insert new task data via a ContentResolver
         ContentValues contentValues = new ContentValues();
         contentValues.put(FavListContract.FavEntry.COLUMN_MOVIE_ID, movieInfo.getId());
         contentValues.put(FavListContract.FavEntry.COLUMN_OVERVIEW, movieInfo.getOverview());
@@ -262,10 +255,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         Uri uri = getContentResolver().insert(FavListContract.FavEntry.CONTENT_URI, contentValues);
 
         if(uri != null){
-            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Favorite ADDED", Toast.LENGTH_LONG).show();
         }
-        // [Hint] Don't forget to call finish() to return to MainActivity after this insert is complete
-        finish();
+
 
     }
 

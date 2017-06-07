@@ -29,9 +29,8 @@ public class FetchFavDetails implements LoaderManager.LoaderCallbacks<Cursor> {
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if(args != null){
             movieID = args.getInt("ID");
-            myDebugPrint("args:"+movieID);
+
         }else{
-            myDebugPrint("args null");
             return null;
 
         }
@@ -93,13 +92,11 @@ public class FetchFavDetails implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
         if(data.moveToNext()) {
-            myDebugPrint(data.toString());
             String title = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_TITLE));
             String overview = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_OVERVIEW));
             String rating = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_RATING));
             String releaseDate = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_RELEASE_DATE));
-            myDebugPrint("Title:" + title);
-            myDebugPrint("Overview:" + overview);
+
             activity.setData(title, overview, releaseDate, rating);
 
         }

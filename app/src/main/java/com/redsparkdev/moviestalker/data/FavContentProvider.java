@@ -3,7 +3,6 @@ package com.redsparkdev.moviestalker.data;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -59,7 +58,6 @@ public class FavContentProvider extends ContentProvider{
                         sortOrder);
                 break;
             case FAVORITE_WITH_ID:
-                myDebugPring("case FAVORITE_WITH_ID");
                 String id = uri.getPathSegments().get(1);
                 cursor = db.query(FavListContract.FavEntry.TABLE_NAME,
                         projection,
@@ -112,6 +110,19 @@ public class FavContentProvider extends ContentProvider{
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        final SQLiteDatabase db = mFavDbHelper.getWritableDatabase();
+        int match = sUriMatcher.match(uri);
+        switch (match){
+            case FAVORITE_WITH_ID:
+                String id = uri.getPathSegments().get(1);
+                db.delete(FavListContract.FavEntry.TABLE_NAME,
+                        "_id=?",
+                        new String[]{id} );
+
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
         return 0;
     }
 
@@ -120,7 +131,7 @@ public class FavContentProvider extends ContentProvider{
         return 0;
     }
 
-    public void myDebugPring(String s){
+    public void myDebugPrint(String s){
         Log.v(TAG, ":"+s);
     }
 }

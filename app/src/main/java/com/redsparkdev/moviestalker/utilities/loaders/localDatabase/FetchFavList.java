@@ -35,7 +35,7 @@ public class FetchFavList implements LoaderManager.LoaderCallbacks<Cursor>{
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        myDebugPrint("onCreateLoader");
+
 
 
 
@@ -48,15 +48,12 @@ public class FetchFavList implements LoaderManager.LoaderCallbacks<Cursor>{
             // onStartLoading() is called when a loader first starts loading data
             @Override
             protected void onStartLoading() {
-                myDebugPrint(" AsyncTaskLoader onStartLoading");
                 if (mTaskData != null) {
                     // Delivers any previously loaded data immediately
-                    myDebugPrint("mTaskData != null");
                     deliverResult(mTaskData);
 
                 } else {
                     // Force a new load
-                    myDebugPrint("force loading");
                     forceLoad();
                 }
             }
@@ -70,7 +67,6 @@ public class FetchFavList implements LoaderManager.LoaderCallbacks<Cursor>{
                 // [Hint] use a try/catch block to cat
                 //
                 //ch any errors in loading data
-                myDebugPrint("loadInBackground");
 
                 try {
                     return activity.getContentResolver().query(FavListContract.FavEntry.CONTENT_URI,
@@ -91,7 +87,6 @@ public class FetchFavList implements LoaderManager.LoaderCallbacks<Cursor>{
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-            myDebugPrint("movie is -1");
 
             int columTitleID = data.getColumnIndex(FavListContract.FavEntry.COLUMN_TITLE);
             int columIdID = data.getColumnIndex(FavListContract.FavEntry._ID);
@@ -103,7 +98,6 @@ public class FetchFavList implements LoaderManager.LoaderCallbacks<Cursor>{
             FavObject[] temp = new FavObject[favList.size()];
             favList.toArray(temp);
 
-            Log.v(TAG, String.valueOf(temp.length));
             activity.setFavListData(temp);
 
     }

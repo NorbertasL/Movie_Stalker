@@ -2,6 +2,7 @@ package com.redsparkdev.moviestalker;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.redsparkdev.moviestalker.data.FavListContract;
 import com.redsparkdev.moviestalker.storageObjects.Constants;
 import com.redsparkdev.moviestalker.utilities.loaders.localDatabase.FetchFavDetails;
 
@@ -43,6 +45,11 @@ public class FavDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO remove from fav and close the activity
+                Uri uri = FavListContract.FavEntry.CONTENT_URI;
+                uri = uri.buildUpon().appendPath(String.valueOf(dbID)).build();
+
+                getContentResolver().delete(uri, null, null);
+                finish();
             }
         });
 

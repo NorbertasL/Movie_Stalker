@@ -83,7 +83,6 @@ public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<Trailer
 
         if(data != null){
 
-            Log.v(TAG, data.toString());
             //set the trailer to the appropriate movie.
             movieDetailActivity.getMovieInfoReference().setTrailers(data);
 
