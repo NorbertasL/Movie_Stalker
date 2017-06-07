@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,6 @@ import java.util.List;
 
 public class MovieDetailActivity extends AppCompatActivity {
     private final static String TAG = MovieDetailActivity.class.getSimpleName();
-    private final boolean DEBUG = true;
 
     private ImageView imageImageView;
     private TextView titleTextView;
@@ -60,6 +60,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v(TAG, "onCreate");
         trailerViews = new ArrayList<>();
         reviewViews = new ArrayList<>();
 
@@ -87,8 +88,8 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         //check if extra data was sent via intent
         if (parentActivity != null) {
-            if (parentActivity.hasExtra("MovieInfoObject")) {
-                movieInfo = (MovieInfo) parentActivity.getSerializableExtra("MovieInfoObject");
+            if (parentActivity.hasExtra(Constants.ExtraData.OBJECT)) {
+                movieInfo = (MovieInfo) parentActivity.getSerializableExtra(Constants.ExtraData.OBJECT);
 
 
                 //gets the data from the movie object
@@ -99,49 +100,13 @@ public class MovieDetailActivity extends AppCompatActivity {
                 overviewTextView.setText(movieInfo.getOverview());
 
 
-                if (savedInstanceState != null) {
-                    if(DEBUG)
-                        Log.v(TAG, ":savedInstanceState != null");
-                    if (savedInstanceState.getBoolean(SAVE_TRAILERS_KEY)) {
-                        showTrailers();
-                    } else {
-                        loadTrailerData(movieInfo.getId());
-                    }
-
-                    if (savedInstanceState.getBoolean(SAVE_REVIEWS_KEY)) {
-                        showReviews();
-                    } else {
-                        loadReviewData(movieInfo.getId());
-                    }
-                } else {
-                    if(DEBUG)
-                        Log.v(TAG, ":savedInstanceState == null");
-                    loadTrailerData(movieInfo.getId());
-                    loadReviewData(movieInfo.getId());
-                }
+                loadTrailerData(movieInfo.getId());
+                loadReviewData(movieInfo.getId());
 
             }
         }
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-
-        if (!movieInfo.getTrailers().isEmpty()) {
-            showTrailers();
-        } else {
-            loadTrailerData(movieInfo.getId());
-        }
-
-        if (!movieInfo.getReviews().isEmpty()) {
-            showReviews();
-        } else {
-            loadReviewData(movieInfo.getId());
-        }
-
-
-    }
 
     public MovieInfo getMovieInfoReference() {
         return movieInfo;
@@ -149,14 +114,11 @@ public class MovieDetailActivity extends AppCompatActivity {
 
 
     public void showReviews() {
-        if(DEBUG)
-            Log.v(TAG, ":showing reviews");
-
-        if(!reviewViews.isEmpty()){
-            for (LinearLayout layout : reviewViews) {
-                mainLayout.removeView(layout);
-            }
+        if(reviewViews.size() > 0){
+            return;
         }
+        Log.v(TAG, ":showing reviews");
+
         List<ReviewInfo> reviewList = movieInfo.getReviews();
         ReviewInfo [] reviewArray = new ReviewInfo[reviewList.size()];
         reviewList.toArray(reviewArray);
@@ -191,6 +153,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     public void showTrailers() {
+        if(trailerViews.size() > 0){
+            return;
+        }
+        Log.v(TAG, ":showTrailers");
 
         final String TYPE_VIDEO = "Trailer";
 
@@ -225,42 +191,41 @@ public class MovieDetailActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
 
-        //checking if trailer data was loaded
-        if (!movieInfo.getTrailers().isEmpty()) {
-            outState.putBoolean(SAVE_TRAILERS_KEY, true);
-        } else {
-            outState.putBoolean(SAVE_TRAILERS_KEY, false);
-        }
-        //checking if review data was loaded
-        if (!movieInfo.getReviews().isEmpty()) {
-            outState.putBoolean(SAVE_REVIEWS_KEY, true);
-        } else {
-            outState.putBoolean(SAVE_REVIEWS_KEY, false);
-        }
-
-        //removing view since they will be rebuilt
-        for (TextView view : trailerViews) {
-            mainLayout.removeView(view);
-        }
-        for (LinearLayout layout : reviewViews) {
-            mainLayout.removeView(layout);
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v(TAG, "onDestroy");
     }
 
     //TODO set up an error text view;
-    public void showError() {
+    public void showError(boolean b) {
+       TextView error = (TextView) findViewById(R.id.trailer_error_message_display);
+
+        if(b)
+            error.setVisibility(View.VISIBLE);
+        else
+            error.setVisibility(View.INVISIBLE);
+
 
     }
 
     //TODO set up loading indicator
-    public void showLoadingIndicator() {
+    public void showLoadingIndicator(boolean b) {
+        ProgressBar loading = (ProgressBar) findViewById(R.id.trailer_loading_indicator);
+
+        if(b)
+            loading.setVisibility(View.VISIBLE);
+        else
+            loading.setVisibility(View.INVISIBLE);
+
 
     }
 
     private void loadTrailerData(String id) {
-        if(DEBUG)
-            Log.v(TAG, ":Loading Trailer data");
+        Log.v(TAG, ":Loading Trailer data");
+
         Bundle queryBundle = new Bundle();
         queryBundle.putString(Constants.ExtraData.ID_KEY, id);
         LoaderManager loaderManager = getSupportLoaderManager();
@@ -273,8 +238,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void loadReviewData(String id) {
-        if(DEBUG)
-            Log.v(TAG, ":Loading review data");
+        Log.v(TAG, ":Loading review data");
+
         Bundle queryBundle = new Bundle();
         queryBundle.putString(Constants.ExtraData.ID_KEY, id);
         LoaderManager loaderManager = getSupportLoaderManager();

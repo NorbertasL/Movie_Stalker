@@ -21,7 +21,7 @@ import java.net.URL;
  */
 
 public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewInfo[]>{
-    private final static String TAG = FetchMovieReviews.class.getSimpleName().toString();
+    final static String TAG = FetchMovieReviews.class.getSimpleName().toString();
 
     //AppCompatActivity is a super class of MovieDerailActivity;
     private final AppCompatActivity callerClass;
@@ -45,7 +45,6 @@ public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewIn
                 }
                 //Clear the list so we don't have duplicates
                 movieDetailActivity.getMovieInfoReference().clearReviewList();
-                //TODO create a loading indicator for data
 
                 //TODO Not sure why forceLoad() in needed.Find out
                 forceLoad();
@@ -80,14 +79,15 @@ public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewIn
 
         if(data != null){
 
-            Log.v(TAG, data.toString());
             //set the review to the appropriate movie.
             movieDetailActivity.getMovieInfoReference().setReviews(data);
+
 
             //displayed the reviews
             movieDetailActivity.showReviews();
         }else{
-            movieDetailActivity.showError();
+            movieDetailActivity.showError(true);
+
 
         }
     }

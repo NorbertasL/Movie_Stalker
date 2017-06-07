@@ -31,6 +31,8 @@ public final class Constants {
         public static final String ID_KEY = "id";
         public static final String TRILERS = "videos";
         public static final String REVIEWS = "reviews";
+
+        public static final String OBJECT = "object";
     }
 
     public static final class ImageSize{

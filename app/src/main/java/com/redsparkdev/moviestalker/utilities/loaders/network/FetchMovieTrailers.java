@@ -40,6 +40,8 @@ public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<Trailer
 
             @Override
             public void onStartLoading(){
+
+                movieDetailActivity.showLoadingIndicator(true);
                 //no id, so nothing to do
                 if (args == null) {
                     return;
@@ -85,10 +87,12 @@ public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<Trailer
             //set the trailer to the appropriate movie.
             movieDetailActivity.getMovieInfoReference().setTrailers(data);
 
+            movieDetailActivity.showLoadingIndicator(false);
             //displayed the trailers
             movieDetailActivity.showTrailers();
         }else{
-            movieDetailActivity.showError();
+            movieDetailActivity.showError(true);
+            movieDetailActivity.showLoadingIndicator(false);
 
         }
     }

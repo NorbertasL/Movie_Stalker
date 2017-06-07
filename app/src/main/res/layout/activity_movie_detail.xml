@@ -70,10 +70,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"/>
+
+
+    <TextView
+    android:id="@+id/trailer_error_message_display"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/generic_error"
+    android:visibility="invisible"
+    />
+    <!--Loading circle-->
+    <ProgressBar
+        android:id="@+id/trailer_loading_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"/>
+
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lv_movie_details_trailers">
+
 
     </ListView>
     <LinearLayout
@@ -85,8 +104,8 @@
 
     </LinearLayout>
 
-
 </LinearLayout>
+
 
 </ScrollView>
 
