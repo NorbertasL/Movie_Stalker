@@ -14,7 +14,7 @@
         android:id="@+id/tv_movie_details_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="40sp"
+        android:textSize="@dimen/movie_title_size"
         android:textAlignment="center"
         android:textStyle="bold"/>
     <LinearLayout
@@ -39,21 +39,21 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add to Fovorite"
+                android:text="@string/add_to_fov"
                 android:id="@+id/button_fav"/>
 
 
             <TextView
                 android:id="@+id/tv_movie_details_release_date"
                 android:text="@string/release_date"
-                android:textSize="15sp"
+                android:textSize="@dimen/release_date_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tv_movie_details_rating"
                 android:text="@string/rating"
-                android:textSize="15sp"
+                android:textSize="@dimen/rating_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -64,12 +64,12 @@
         android:textAlignment="center"
         android:text="@string/overview"
         android:textStyle="bold"
-        android:textSize="30sp"/>
+        android:textSize="@dimen/overview_title_size"/>
     <TextView
         android:id="@+id/tv_movie_details_overview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"/>
+        android:textSize="@dimen/overview_size"/>
 
 
     <TextView

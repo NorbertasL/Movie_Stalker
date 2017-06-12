@@ -11,4 +11,10 @@
     <string name="release_date">Release Date:</string>
     <string name="rating">Rating:</string>
     <string name="overview">Overview</string>
+    <string name="more_comments">Show More Comments</string>
+    <string name="fov_added">Favorite Added</string>
+    <string name="add_to_fov">Add To Favorites</string>
+
+    <!-- fav details strings-->
+    <string name="remove_fav">Remove Favorite</string>
 </resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="movie_title_size">40sp</dimen>
+    <dimen name="release_date_size">15sp</dimen>
+    <dimen name="rating_size">@dimen/release_date_size</dimen>
+    <dimen name="overview_title_size">30sp</dimen>
+    <dimen name="overview_size">20sp</dimen>
+    <dimen name="review_author_size">15sp</dimen>
+    <dimen name="trailer_text_size">30sp</dimen>
+</resources>

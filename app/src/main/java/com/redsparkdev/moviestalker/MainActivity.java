@@ -106,11 +106,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityAdapt
             queryBundle.putString(Constants.SortOrder.KEY, sortBy);
 
             LoaderManager loaderManager = getSupportLoaderManager();
-            Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(Constants.LoaderID.MainActivity_LOADER_ID);
+            Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(Constants.LoaderID
+                    .MainActivity_LOADER_ID);
             if (movieSearch == null) {
-                loaderManager.initLoader(Constants.LoaderID.MainActivity_LOADER_ID, queryBundle, new FetchMovieData(this));
+                loaderManager.initLoader(Constants.LoaderID.MainActivity_LOADER_ID, queryBundle,
+                        new FetchMovieData(this));
             } else {
-                loaderManager.restartLoader(Constants.LoaderID.MainActivity_LOADER_ID, queryBundle, new FetchMovieData(this));
+                loaderManager.restartLoader(Constants.LoaderID.MainActivity_LOADER_ID, queryBundle,
+                        new FetchMovieData(this));
             }
 
     }

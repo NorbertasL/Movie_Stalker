@@ -28,8 +28,6 @@ public class FavDetailActivity extends AppCompatActivity {
     private int dbID;
     private String movieID;
 
-    //TODO make loading indicator and error message
-    //TODO make use of saveState
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +40,7 @@ public class FavDetailActivity extends AppCompatActivity {
         releaseDateTextView = (TextView) findViewById(R.id.fav_release_date);
         favButton = (Button) findViewById(R.id.fav_button);
 
-        favButton.setText("Remove Favorite");
+        favButton.setText(R.string.remove_fav);
 
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +74,8 @@ public class FavDetailActivity extends AppCompatActivity {
 
 
 
-    public void setData(String title, String overview, String releaseDate, String rating, String movieID){
+    public void setData(String title, String overview, String releaseDate, String rating,
+                        String movieID){
         titleTextView.setText(title);
         overviewTextView.setText(overview);
         releaseDateTextView.setText(releaseDate);
@@ -90,9 +89,11 @@ public class FavDetailActivity extends AppCompatActivity {
         Loader<Cursor> data = loaderManager.getLoader(Constants.LoaderID.FavDetailActivity_LOADER_ID);
 
         if (data == null) {
-            loaderManager.initLoader(Constants.LoaderID.FavDetailActivity_LOADER_ID, queryBundle, new FetchFavDetails(this));
+            loaderManager.initLoader(Constants.LoaderID.FavDetailActivity_LOADER_ID, queryBundle,
+                    new FetchFavDetails(this));
         } else {
-            loaderManager.restartLoader(Constants.LoaderID.FavDetailActivity_LOADER_ID, queryBundle, new FetchFavDetails(this));
+            loaderManager.restartLoader(Constants.LoaderID.FavDetailActivity_LOADER_ID, queryBundle,
+                    new FetchFavDetails(this));
         }
 
     }

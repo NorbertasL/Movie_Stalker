@@ -88,7 +88,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         //check if extra data was sent via intent
         if (parentActivity != null) {
             if (parentActivity.hasExtra(Constants.ExtraData.OBJECT)) {
-                movieInfo = (MovieInfo) parentActivity.getSerializableExtra(Constants.ExtraData.OBJECT);
+                movieInfo = (MovieInfo) parentActivity.getSerializableExtra(Constants
+                        .ExtraData.OBJECT);
 
 
                 //gets the data from the movie object
@@ -125,7 +126,8 @@ public class MovieDetailActivity extends AppCompatActivity {
             return;
         }
         for(int i = 0; i < reviewsToShow && i < reviewArray.length ; i++){
-            final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.review_list_item, null);
+            final LinearLayout layout = (LinearLayout) View.inflate(this, R.layout.review_list_item,
+                    null);
             TextView author = (TextView) layout.findViewById(R.id.tv_review_author);
             TextView content = (TextView) layout.findViewById(R.id.tv_review_content);
             reviewViews.add(layout);
@@ -137,7 +139,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         //if the button is press it loads 3 more reviews
         if(reviewsToShow < reviewArray.length){
             final Button showMore = new Button(this);
-            showMore.setText("Show More Comments");
+            showMore.setText(getString(R.string.more_comments));
 
             mainLayout.addView(showMore);
             showMore.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +164,8 @@ public class MovieDetailActivity extends AppCompatActivity {
             //For now only interested in trailers
             if (trailer.getType().equalsIgnoreCase(TYPE_VIDEO)) {
                 trailer.setLink(NetworkUtil.buildTrailerVideoUrl(trailer.getKey()));
-                final TextView text_view = (TextView) View.inflate(this, R.layout.trailer_list_item, null);
+                final TextView text_view = (TextView) View.inflate(this, R.layout.trailer_list_item,
+                        null);
 
                 trailerViews.add(text_view);
 
@@ -176,7 +179,8 @@ public class MovieDetailActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         String link = text_view.getTag().toString();
                         if (!link.isEmpty()) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(text_view.getTag().toString())));
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(text_view
+                                    .getTag().toString())));
                         }
                     }
                 });
@@ -256,7 +260,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         Uri uri = getContentResolver().insert(FavListContract.FavEntry.CONTENT_URI, contentValues);
 
         if(uri != null){
-            Toast.makeText(getBaseContext(), "Favorite ADDED", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), getString(R.string.fov_added), Toast.LENGTH_LONG).show();
         }
 
 
