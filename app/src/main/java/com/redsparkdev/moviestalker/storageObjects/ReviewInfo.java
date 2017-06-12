@@ -8,15 +8,17 @@ public class ReviewInfo {
     private String author;
     private String review;
 
-    public ReviewInfo(String author, String review){
+    public ReviewInfo(String author, String review) {
         this.author = author;
         this.review = review;
 
     }
-    public String getAuthor(){
+
+    public String getAuthor() {
         return author;
     }
-    public String getReview(){
+
+    public String getReview() {
         return review;
     }
 }

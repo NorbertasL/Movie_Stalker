@@ -21,16 +21,16 @@ public class FetchFavDetails implements LoaderManager.LoaderCallbacks<Cursor> {
     private FavDetailActivity activity;
     int movieID;
 
-    public FetchFavDetails(FavDetailActivity activity){
+    public FetchFavDetails(FavDetailActivity activity) {
         this.activity = activity;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if(args != null){
+        if (args != null) {
             movieID = args.getInt("ID");
 
-        }else{
+        } else {
             return null;
 
         }
@@ -66,13 +66,13 @@ public class FetchFavDetails implements LoaderManager.LoaderCallbacks<Cursor> {
                 //ch any errors in loading data
 
                 try {
-                    return activity.getContentResolver().query(FavListContract.FavEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movieID)).build(),
-                                null,
-                                null,
-                                null,
-                                null);
-
-
+                    return activity.getContentResolver().query(FavListContract.FavEntry
+                                    .CONTENT_URI.buildUpon().appendPath(String.valueOf(movieID))
+                                    .build(),
+                            null,
+                            null,
+                            null,
+                            null);
 
 
                 } catch (Exception e) {
@@ -84,20 +84,25 @@ public class FetchFavDetails implements LoaderManager.LoaderCallbacks<Cursor> {
         };
 
 
-
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
 
-        if(data.moveToNext()) {
-            String title = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_TITLE));
-            String overview = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_OVERVIEW));
-            String rating = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_RATING));
-            String releaseDate = data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_RELEASE_DATE));
+        if (data.moveToNext()) {
+            String title =
+                    data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_TITLE));
+            String overview =
+                    data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_OVERVIEW));
+            String rating =
+                    data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_RATING));
+            String releaseDate =
+                    data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_RELEASE_DATE));
+            String movieID =
+                    data.getString(data.getColumnIndex(FavListContract.FavEntry.COLUMN_MOVIE_ID));
 
-            activity.setData(title, overview, releaseDate, rating);
+            activity.setData(title, overview, releaseDate, rating, movieID);
 
         }
 
@@ -108,7 +113,8 @@ public class FetchFavDetails implements LoaderManager.LoaderCallbacks<Cursor> {
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-    public static void myDebugPrint(String s){
-        Log.v(TAG, ":"+s);
+
+    public static void myDebugPrint(String s) {
+        Log.v(TAG, ":" + s);
     }
 }

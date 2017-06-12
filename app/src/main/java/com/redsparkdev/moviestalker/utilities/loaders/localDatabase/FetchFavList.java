@@ -6,13 +6,11 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.redsparkdev.moviestalker.FavActivity;
-import com.redsparkdev.moviestalker.FavDetailActivity;
 import com.redsparkdev.moviestalker.data.FavListContract;
-import com.redsparkdev.moviestalker.data.FavObject;
+import com.redsparkdev.moviestalker.storageObjects.FavObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,22 +19,19 @@ import java.util.List;
  * Created by Red on 05/06/2017.
  */
 
-public class FetchFavList implements LoaderManager.LoaderCallbacks<Cursor>{
+public class FetchFavList implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private final static String TAG = FetchFavList.class.getSimpleName();
 
     private FavActivity activity;
 
 
-
-    public FetchFavList(FavActivity activity){
+    public FetchFavList(FavActivity activity) {
         this.activity = activity;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-
 
 
         return new AsyncTaskLoader<Cursor>(activity) {
@@ -70,10 +65,10 @@ public class FetchFavList implements LoaderManager.LoaderCallbacks<Cursor>{
 
                 try {
                     return activity.getContentResolver().query(FavListContract.FavEntry.CONTENT_URI,
-                                null,
-                                null,
-                                null,
-                                null);
+                            null,
+                            null,
+                            null,
+                            null);
 
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to asynchronously load data.");
@@ -88,17 +83,19 @@ public class FetchFavList implements LoaderManager.LoaderCallbacks<Cursor>{
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
 
-            int columTitleID = data.getColumnIndex(FavListContract.FavEntry.COLUMN_TITLE);
-            int columIdID = data.getColumnIndex(FavListContract.FavEntry._ID);
+        int columTitleID = data.getColumnIndex(FavListContract.FavEntry.COLUMN_TITLE);
+        int columIdID = data.getColumnIndex(FavListContract.FavEntry._ID);
+        int columMovieIdID = data.getColumnIndex(FavListContract.FavEntry.COLUMN_MOVIE_ID);
 
-            List<FavObject> favList = new ArrayList<>();
-            while (data.moveToNext()) {
-                favList.add(new FavObject(data.getString(columTitleID), data.getInt(columIdID)));
-            }
-            FavObject[] temp = new FavObject[favList.size()];
-            favList.toArray(temp);
+        List<FavObject> favList = new ArrayList<>();
+        while (data.moveToNext()) {
+            favList.add(new FavObject(data.getString(columTitleID), data.getInt(columIdID),
+                    data.getInt(columMovieIdID)));
+        }
+        FavObject[] temp = new FavObject[favList.size()];
+        favList.toArray(temp);
 
-            activity.setFavListData(temp);
+        activity.setFavListData(temp);
 
     }
 
@@ -106,8 +103,9 @@ public class FetchFavList implements LoaderManager.LoaderCallbacks<Cursor>{
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-    public static void myDebugPrint(String s){
-        Log.v(TAG, ":"+s);
+
+    public static void myDebugPrint(String s) {
+        Log.v(TAG, ":" + s);
     }
 }
 

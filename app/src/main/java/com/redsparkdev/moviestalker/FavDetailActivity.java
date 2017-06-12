@@ -7,23 +7,26 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.redsparkdev.moviestalker.data.FavListContract;
+import com.redsparkdev.moviestalker.data.ImageStorage;
 import com.redsparkdev.moviestalker.storageObjects.Constants;
 import com.redsparkdev.moviestalker.utilities.loaders.localDatabase.FetchFavDetails;
 
 public class FavDetailActivity extends AppCompatActivity {
     private final static String TAG = FavDetailActivity.class.getSimpleName();
+
+
     private TextView titleTextView;
     private TextView overviewTextView;
     private TextView ratingTextView;
     private TextView releaseDateTextView;
     private Button favButton;
     private int dbID;
+    private String movieID;
 
     //TODO make loading indicator and error message
     //TODO make use of saveState
@@ -48,7 +51,9 @@ public class FavDetailActivity extends AppCompatActivity {
                 Uri uri = FavListContract.FavEntry.CONTENT_URI;
                 uri = uri.buildUpon().appendPath(String.valueOf(dbID)).build();
 
+                ImageStorage.deleteImage(movieID);
                 getContentResolver().delete(uri, null, null);
+
                 finish();
             }
         });
@@ -57,22 +62,26 @@ public class FavDetailActivity extends AppCompatActivity {
         Intent parentActivity = getIntent();
 
         //check if extra data was sent via intent
-        if (parentActivity != null) {
+        if (parentActivity != null && savedInstanceState == null) {
             dbID = parentActivity.getIntExtra("ID", -1);
             if(dbID == -1){
                 return;
             }
-           loadFavData(dbID);
 
+           loadFavData(dbID);
         }
 
 
     }
-    public void setData(String title, String overview, String releaseDate, String rating){
+
+
+
+    public void setData(String title, String overview, String releaseDate, String rating, String movieID){
         titleTextView.setText(title);
         overviewTextView.setText(overview);
         releaseDateTextView.setText(releaseDate);
         ratingTextView.setText(rating);
+        this.movieID = movieID;
     }
     private void loadFavData(int id){
         Bundle queryBundle = new Bundle();

@@ -15,21 +15,23 @@ import android.util.Log;
  * Created by Red on 24/05/2017.
  */
 
-public class FavContentProvider extends ContentProvider{
+public class FavContentProvider extends ContentProvider {
     private final static String TAG = FavContentProvider.class.getSimpleName();
 
     public static final int FAVORITES = 100;
-    public static final int FAVORITE_WITH_ID =  101;
+    public static final int FAVORITE_WITH_ID = 101;
     //private static final int FAVORITE_TITLE = 102;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
-    private static UriMatcher buildUriMatcher(){
+    private static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         uriMatcher.addURI(FavListContract.AUTHORITY, FavListContract.PATH_FAVORITES, FAVORITES);
-        uriMatcher.addURI(FavListContract.AUTHORITY, FavListContract.PATH_FAVORITES + "/#", FAVORITE_WITH_ID);
-        //uriMatcher.addURI(FavListContract.AUTHORITY, FavListContract.PATH_FAVORITES + "/" +FavListContract.FavEntry.COLUMN_TITLE, FAVORITE_TITLE);
+        uriMatcher.addURI(FavListContract.AUTHORITY, FavListContract.PATH_FAVORITES + "/#",
+                FAVORITE_WITH_ID);
+        //uriMatcher.addURI(FavListContract.AUTHORITY, FavListContract.PATH_FAVORITES + "/"
+        // +FavListContract.FavEntry.COLUMN_TITLE, FAVORITE_TITLE);
 
         return uriMatcher;
     }
@@ -43,11 +45,12 @@ public class FavContentProvider extends ContentProvider{
     }
 
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection,
+                        @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         final SQLiteDatabase db = mFavDbHelper.getReadableDatabase();
         int match = sUriMatcher.match(uri);
         Cursor cursor;
-        switch (match){
+        switch (match) {
             case FAVORITES:
                 cursor = db.query(FavListContract.FavEntry.TABLE_NAME,
                         projection,
@@ -68,7 +71,7 @@ public class FavContentProvider extends ContentProvider{
                         sortOrder);
                 break;
             default:
-                throw new UnsupportedOperationException("Unknown uri:"+uri);
+                throw new UnsupportedOperationException("Unknown uri:" + uri);
 
         }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -88,12 +91,12 @@ public class FavContentProvider extends ContentProvider{
         int match = sUriMatcher.match(uri);
         Uri returnUri;
 
-        switch (match){
+        switch (match) {
             case FAVORITES:
                 long id = db.insert(FavListContract.FavEntry.TABLE_NAME, null, values);
-                if(id>0){
+                if (id > 0) {
                     returnUri = ContentUris.withAppendedId(FavListContract.FavEntry.CONTENT_URI, id);
-                }else{
+                } else {
 
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -109,15 +112,16 @@ public class FavContentProvider extends ContentProvider{
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, @Nullable String selection,
+                      @Nullable String[] selectionArgs) {
         final SQLiteDatabase db = mFavDbHelper.getWritableDatabase();
         int match = sUriMatcher.match(uri);
-        switch (match){
+        switch (match) {
             case FAVORITE_WITH_ID:
                 String id = uri.getPathSegments().get(1);
                 db.delete(FavListContract.FavEntry.TABLE_NAME,
                         "_id=?",
-                        new String[]{id} );
+                        new String[]{id});
 
                 break;
             default:
@@ -127,11 +131,12 @@ public class FavContentProvider extends ContentProvider{
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection,
+                      @Nullable String[] selectionArgs) {
         return 0;
     }
 
-    public void myDebugPrint(String s){
-        Log.v(TAG, ":"+s);
+    public void myDebugPrint(String s) {
+        Log.v(TAG, ":" + s);
     }
 }

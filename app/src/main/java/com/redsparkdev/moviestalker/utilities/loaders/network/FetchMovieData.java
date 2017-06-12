@@ -25,7 +25,7 @@ public class FetchMovieData implements LoaderManager.LoaderCallbacks<MovieInfo[]
     private final MainActivity mainActivity;
 
     //We have a constructor just to get access to the Main Activity
-    public FetchMovieData(MainActivity mainActivity){
+    public FetchMovieData(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
     }
 
@@ -34,7 +34,7 @@ public class FetchMovieData implements LoaderManager.LoaderCallbacks<MovieInfo[]
         return new AsyncTaskLoader<MovieInfo[]>(mainActivity) {
 
             @Override
-            public void onStartLoading(){
+            public void onStartLoading() {
                 if (args == null) {
                     return;
                 }
@@ -47,11 +47,11 @@ public class FetchMovieData implements LoaderManager.LoaderCallbacks<MovieInfo[]
             public MovieInfo[] loadInBackground() {
                 String sortBy = args.getString(Constants.SortOrder.KEY);
                 URL movieRequestUrl = NetworkUtil.buildUrl(sortBy);
-                try{
+                try {
                     String jsonMovieResponse = NetworkUtil.getResponseFromHttpUrl(movieRequestUrl);
-                    MovieInfo [] movieData = MoviedbJsonUtil.getMovieObjects(jsonMovieResponse);
+                    MovieInfo[] movieData = MoviedbJsonUtil.getMovieObjects(jsonMovieResponse);
                     return movieData;
-                }catch(IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -61,10 +61,10 @@ public class FetchMovieData implements LoaderManager.LoaderCallbacks<MovieInfo[]
 
     @Override
     public void onLoadFinished(Loader<MovieInfo[]> loader, MovieInfo[] data) {
-        if(data !=null){
+        if (data != null) {
             mainActivity.showMovieData();
             mainActivity.setMovieData(data);
-        }else{
+        } else {
             //if array is empty shows a generic error
             mainActivity.showErrorMessage();
         }

@@ -17,7 +17,8 @@ import com.squareup.picasso.Picasso;
  * Created by Red on 30/04/2017.
  */
 
-public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.AdapterViewHolder> {
+public class MainActivityAdapter
+        extends RecyclerView.Adapter<MainActivityAdapter.AdapterViewHolder> {
 
     //Stores all the movie data(not images)
     private MovieInfo[] movieData;
@@ -28,7 +29,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         void onClick(MovieInfo movieInfoObject);
     }
 
-    public MainActivityAdapter(MyAdapterOnClickHandler clickHandler){
+    public MainActivityAdapter(MyAdapterOnClickHandler clickHandler) {
         this.clickHandler = clickHandler;
     }
 
@@ -46,7 +47,8 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     @Override
     public void onBindViewHolder(AdapterViewHolder holder, int position) {
         String thisMoviesPosterPath = movieData[position].getPoster_path();
-        String imgUrl = NetworkUtil.buildImgUrl(thisMoviesPosterPath, Constants.ImageSize.W185).toString();
+        String imgUrl = NetworkUtil.buildImgUrl(thisMoviesPosterPath, Constants.ImageSize.W185)
+                .toString();
         movieData[position].setFull_poster_path(imgUrl);
         //Using Picasso to handle the image
         Picasso.with(holder.holderView.getContext()).load(imgUrl).into(holder.movieImageView);
@@ -54,29 +56,37 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
 
     @Override
     public int getItemCount() {
-        if(movieData == null)
+        if (movieData == null)
             return 0;
         return movieData.length;
     }
-    public class AdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+    public class AdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final ImageView movieImageView;
         private final View holderView;
+
         private AdapterViewHolder(View view) {
             super(view);
             holderView = view;
             movieImageView = (ImageView) view.findViewById(R.id.image_thumbnail);
             view.setOnClickListener(this);
         }
-    @Override
+
+        @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             clickHandler.onClick(movieData[adapterPosition]);
 
         }
     }
-    public void setMovieData(MovieInfo[] movieData){
+
+    public void setMovieData(MovieInfo[] movieData) {
         this.movieData = movieData;
         notifyDataSetChanged();
+    }
+
+    public MovieInfo[] getMovieData() {
+        return movieData;
     }
 
 }

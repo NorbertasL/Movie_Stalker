@@ -21,15 +21,16 @@ import java.net.URL;
  * Class responsible for handling movie trailer requests
  */
 
-public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<TrailerInfo[]>{
+public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<TrailerInfo[]> {
     private final static String TAG = FetchMovieTrailers.class.getSimpleName().toString();
 
     //AppCompatActivity is a super class of MovieDerailActivity;
     private final AppCompatActivity callerClass;
     private final MovieDetailActivity movieDetailActivity;
-    public FetchMovieTrailers(AppCompatActivity callerClass){
+
+    public FetchMovieTrailers(AppCompatActivity callerClass) {
         this.callerClass = callerClass;
-        this.movieDetailActivity = (MovieDetailActivity)callerClass;
+        this.movieDetailActivity = (MovieDetailActivity) callerClass;
     }
 
     @Override
@@ -39,7 +40,7 @@ public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<Trailer
 
 
             @Override
-            public void onStartLoading(){
+            public void onStartLoading() {
 
                 movieDetailActivity.showLoadingIndicator(true);
                 //no id, so nothing to do
@@ -55,21 +56,24 @@ public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<Trailer
             }
 
             @Override
-            public TrailerInfo [] loadInBackground() {
+            public TrailerInfo[] loadInBackground() {
                 //gets the id and stores in in a string
                 String id = args.getString(Constants.ExtraData.ID_KEY);
 
                 //requests a URL for the id
                 URL trailerListUrl = NetworkUtil.buildTrailerListUrl(id);
-                try{
+                try {
                     //gets the raw json
-                    String jsonTrailerListResponse = NetworkUtil.getResponseFromHttpUrl(trailerListUrl);
+                    String jsonTrailerListResponse = NetworkUtil
+                            .getResponseFromHttpUrl(trailerListUrl);
                     Log.v(TAG, jsonTrailerListResponse);
 
-                    //uses the MoviedbJsonUtil to sort and store the json data in a TrailerInfo object
-                    TrailerInfo [] trailers = MoviedbJsonUtil.getTrailerObjects(jsonTrailerListResponse);
+                    //uses the MoviedbJsonUtil to sort and store the json data in
+                    // a TrailerInfo object
+                    TrailerInfo[] trailers = MoviedbJsonUtil
+                            .getTrailerObjects(jsonTrailerListResponse);
                     return trailers;
-                }catch(IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -81,7 +85,7 @@ public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<Trailer
     public void onLoadFinished(Loader<TrailerInfo[]> loader, TrailerInfo[] data) {
 
 
-        if(data != null){
+        if (data != null) {
 
             //set the trailer to the appropriate movie.
             movieDetailActivity.getMovieInfoReference().setTrailers(data);
@@ -89,7 +93,7 @@ public class FetchMovieTrailers implements LoaderManager.LoaderCallbacks<Trailer
             movieDetailActivity.showLoadingIndicator(false);
             //displayed the trailers
             movieDetailActivity.showTrailers();
-        }else{
+        } else {
             movieDetailActivity.showError(true);
             movieDetailActivity.showLoadingIndicator(false);
 

@@ -20,15 +20,16 @@ import java.net.URL;
  * Created by Red on 22/05/2017.
  */
 
-public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewInfo[]>{
+public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewInfo[]> {
     final static String TAG = FetchMovieReviews.class.getSimpleName().toString();
 
     //AppCompatActivity is a super class of MovieDerailActivity;
     private final AppCompatActivity callerClass;
     private final MovieDetailActivity movieDetailActivity;
-    public FetchMovieReviews(AppCompatActivity callerClass){
+
+    public FetchMovieReviews(AppCompatActivity callerClass) {
         this.callerClass = callerClass;
-        this.movieDetailActivity = (MovieDetailActivity)callerClass;
+        this.movieDetailActivity = (MovieDetailActivity) callerClass;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewIn
 
 
             @Override
-            public void onStartLoading(){
+            public void onStartLoading() {
                 //no id, so nothing to do
                 if (args == null) {
                     return;
@@ -51,21 +52,22 @@ public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewIn
             }
 
             @Override
-            public ReviewInfo [] loadInBackground() {
+            public ReviewInfo[] loadInBackground() {
                 //gets the id and stores in in a string
                 String id = args.getString(Constants.ExtraData.ID_KEY);
 
                 //requests a URL for the id
                 URL reviewListUrl = NetworkUtil.buildReviewListUrl(id);
-                try{
+                try {
                     //gets the raw json
-                    String jsonReviewListResponse = NetworkUtil.getResponseFromHttpUrl(reviewListUrl);
+                    String jsonReviewListResponse = NetworkUtil
+                            .getResponseFromHttpUrl(reviewListUrl);
                     Log.v(TAG, jsonReviewListResponse);
 
                     //uses the MoviedbJsonUtil to sort and store the json data in a ReviewInfo object
-                    ReviewInfo [] reviews = MoviedbJsonUtil.getReviewObjects(jsonReviewListResponse);
+                    ReviewInfo[] reviews = MoviedbJsonUtil.getReviewObjects(jsonReviewListResponse);
                     return reviews;
-                }catch(IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 return null;
@@ -77,7 +79,7 @@ public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewIn
     public void onLoadFinished(Loader<ReviewInfo[]> loader, ReviewInfo[] data) {
 
 
-        if(data != null){
+        if (data != null) {
 
             //set the review to the appropriate movie.
             movieDetailActivity.getMovieInfoReference().setReviews(data);
@@ -85,7 +87,7 @@ public class FetchMovieReviews implements LoaderManager.LoaderCallbacks<ReviewIn
 
             //displayed the reviews
             movieDetailActivity.showReviews();
-        }else{
+        } else {
             movieDetailActivity.showError(true);
 
 

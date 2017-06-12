@@ -36,16 +36,19 @@ public class TrailerInfo {
         this.site = site;
     }
 
-    public void setType(String type){
-        this.type =  type;
+    public void setType(String type) {
+        this.type = type;
     }
-    public String getType(){
+
+    public String getType() {
         return type;
     }
-    public void setLink(URL url){
+
+    public void setLink(URL url) {
         link = url;
     }
-    public URL getLink(){
+
+    public URL getLink() {
         return link;
     }
 }

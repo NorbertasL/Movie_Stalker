@@ -12,41 +12,42 @@ import org.json.JSONObject;
 
 /**
  * Created by Red on 30/04/2017.
- *
+ * <p>
  * Util to format and store JSON data into objects
  */
 
-public final class MoviedbJsonUtil{
+public final class MoviedbJsonUtil {
     final static String TAG = MoviedbJsonUtil.class.getSimpleName();
 
     final static String RESULTS = "results";
 
 
-    public static ReviewInfo[] getReviewObjects(String reviewJsonString){
+    public static ReviewInfo[] getReviewObjects(String reviewJsonString) {
         final String AUTHOR_KEY = "author";
         final String CONTENT_KEY = "content";
-        Log.v(TAG, ":RAW STRING:"+reviewJsonString);
+        Log.v(TAG, ":RAW STRING:" + reviewJsonString);
 
         ReviewInfo[] reviews;
-        try{
+        try {
             JSONObject reviewJson = new JSONObject(reviewJsonString);
             JSONArray reviewArray = reviewJson.getJSONArray(RESULTS);
             reviews = new ReviewInfo[reviewArray.length()];
-            for(int i = 0; i<reviewArray.length(); i++){
+            for (int i = 0; i < reviewArray.length(); i++) {
                 JSONObject reviewInfoJson = reviewArray.getJSONObject(i);
 
-                reviews[i] = new ReviewInfo(reviewInfoJson.getString(AUTHOR_KEY), reviewInfoJson.getString(CONTENT_KEY));
+                reviews[i] = new ReviewInfo(reviewInfoJson.getString(AUTHOR_KEY),
+                        reviewInfoJson.getString(CONTENT_KEY));
 
             }
             return reviews;
 
-        }catch(JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static TrailerInfo[] getTrailerObjects(String trailerJsonString){
+    public static TrailerInfo[] getTrailerObjects(String trailerJsonString) {
 
         final String NAME_KEY = "name";
         final String KEY_KEY = "key";
@@ -54,11 +55,11 @@ public final class MoviedbJsonUtil{
         final String TYPE_KEY = "type";
 
         TrailerInfo[] trailers;
-        try{
+        try {
             JSONObject trailerJson = new JSONObject(trailerJsonString);
             JSONArray trailerArray = trailerJson.getJSONArray(RESULTS);
             trailers = new TrailerInfo[trailerArray.length()];
-            for(int i = 0; i < trailerArray.length(); i++) {
+            for (int i = 0; i < trailerArray.length(); i++) {
                 JSONObject trailerInfoJson = trailerArray.getJSONObject(i);
 
                 trailers[i] = new TrailerInfo();
@@ -68,18 +69,16 @@ public final class MoviedbJsonUtil{
                 trailers[i].setType(trailerInfoJson.getString(TYPE_KEY));
 
 
-
-
             }
             return trailers;
 
-        }catch(JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static MovieInfo[] getMovieObjects(String movieJsonString){
+    public static MovieInfo[] getMovieObjects(String movieJsonString) {
 
 
         //JSON keywords
@@ -87,9 +86,9 @@ public final class MoviedbJsonUtil{
         final String STATUS_CODE = "status_code";//this indicates an error1
         final String POSTER_PATH = "poster_path";
         final String OVERVIEW = "overview";
-        final String RELEASE_DATE= "release_date";
+        final String RELEASE_DATE = "release_date";
         final String TITLE = "title";
-        final String ORIGINAL_TITLE="original_title";
+        final String ORIGINAL_TITLE = "original_title";
         final String POPULARITY = "popularity";
         final String VOTE_COUNT = "vote_count";
         final String VOTE_AVERAGE = "vote_average";
@@ -98,15 +97,15 @@ public final class MoviedbJsonUtil{
 
         try {
             JSONObject movieJson = new JSONObject((movieJsonString));
-            if(movieJson.has(STATUS_CODE)){
-                Log.v(TAG, "Error:"+ movieJson.getInt(STATUS_CODE));
+            if (movieJson.has(STATUS_CODE)) {
+                Log.v(TAG, "Error:" + movieJson.getInt(STATUS_CODE));
                 return null;
             }
             JSONArray movieArray = movieJson.getJSONArray(RESULTS);
 
             movies = new MovieInfo[movieArray.length()];
 
-            for(int i = 0; i < movieArray.length(); i++){
+            for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movieInfoJson = movieArray.getJSONObject(i);
                 //Log.v(TAG, ":"+movieInfoJson.getString(TITLE));
 
@@ -125,7 +124,7 @@ public final class MoviedbJsonUtil{
             }
             return movies;
 
-        }catch(JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;

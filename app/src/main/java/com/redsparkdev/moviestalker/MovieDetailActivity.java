@@ -3,6 +3,8 @@ package com.redsparkdev.moviestalker;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.redsparkdev.moviestalker.data.FavListContract;
+import com.redsparkdev.moviestalker.data.ImageStorage;
 import com.redsparkdev.moviestalker.storageObjects.Constants;
 import com.redsparkdev.moviestalker.storageObjects.ReviewInfo;
 import com.redsparkdev.moviestalker.utilities.loaders.network.FetchMovieReviews;
@@ -42,9 +45,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     private MovieInfo movieInfo;
 
     private Button favButton;
-
-    private static final String SAVE_TRAILERS_KEY = "trailers";
-    private static final String SAVE_REVIEWS_KEY = "reviews";
 
     private int reviewsToShow = 3;
 
@@ -252,6 +252,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         contentValues.put(FavListContract.FavEntry.COLUMN_RATING, movieInfo.getVote_average());
         contentValues.put(FavListContract.FavEntry.COLUMN_RELEASE_DATE, movieInfo.getRelease_date());
         contentValues.put(FavListContract.FavEntry.COLUMN_TITLE, movieInfo.getTitle());
+        ImageStorage.saveImage(imageImageView.getDrawable(), movieInfo.getId());
         Uri uri = getContentResolver().insert(FavListContract.FavEntry.CONTENT_URI, contentValues);
 
         if(uri != null){

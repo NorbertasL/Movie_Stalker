@@ -5,10 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.redsparkdev.moviestalker.R;
-import com.redsparkdev.moviestalker.data.FavObject;
+import com.redsparkdev.moviestalker.storageObjects.FavObject;
+import com.redsparkdev.moviestalker.data.ImageStorage;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 /**
  * Created by Red on 05/06/2017.
@@ -20,10 +24,11 @@ public class FavActivityAdapter extends RecyclerView.Adapter<FavActivityAdapter.
 
     private AdapterOnClickHandler clickHandler;
 
-    public interface AdapterOnClickHandler{
+    public interface AdapterOnClickHandler {
         void onClick(FavObject favObject);
     }
-    public FavActivityAdapter(AdapterOnClickHandler clickHandler){
+
+    public FavActivityAdapter(AdapterOnClickHandler clickHandler) {
         this.clickHandler = clickHandler;
     }
 
@@ -41,26 +46,27 @@ public class FavActivityAdapter extends RecyclerView.Adapter<FavActivityAdapter.
     @Override
     public void onBindViewHolder(AdapterViewHolder holder, int position) {
 
-        String title = favList[position].getTitle();
-        holder.titleView.setText(title);
+        int thumbailID = favList[position].getThumbailID();
+        File file = ImageStorage.getImageLocation(thumbailID);
+        Picasso.with(holder.holderView.getContext()).load(file).into(holder.favImageView);
 
     }
 
     @Override
     public int getItemCount() {
-        if(favList == null)
+        if (favList == null)
             return 0;
         return favList.length;
     }
 
-    public class AdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private final TextView titleView;
+    public class AdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final ImageView favImageView;
         private final View holderView;
 
         public AdapterViewHolder(View itemView) {
             super(itemView);
             holderView = itemView;
-            titleView = (TextView) itemView.findViewById(R.id.movie_title);
+            favImageView = (ImageView) itemView.findViewById(R.id.fav_image_thumbnail);
             itemView.setOnClickListener(this);
         }
 
@@ -70,8 +76,10 @@ public class FavActivityAdapter extends RecyclerView.Adapter<FavActivityAdapter.
             clickHandler.onClick(favList[adapterPosition]);
         }
     }
-    public void setFavListData(FavObject[] favListData){
-        this.favList = favListData;
+
+    public void setFavList(FavObject[] favList) {
+        this.favList = favList;
         notifyDataSetChanged();
+
     }
 }

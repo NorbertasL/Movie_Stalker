@@ -1,6 +1,8 @@
 package com.redsparkdev.moviestalker;
 
 import android.content.Intent;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
@@ -24,12 +26,21 @@ import com.redsparkdev.moviestalker.utilities.loaders.network.FetchMovieData;
 import com.redsparkdev.moviestalker.storageObjects.MovieInfo;
 import com.redsparkdev.moviestalker.utilities.NetworkUtil;
 
+import java.io.Serializable;
+
 public class MainActivity extends AppCompatActivity implements MainActivityAdapter.MyAdapterOnClickHandler{
 
     private final static String TAG = MainActivity.class.getSimpleName();
 
 
     private final static String SORT_ORDER_KEY = "sort";
+    private final static String LIST_KEY = "list_key";
+    private final static String POS_KEY = "pos_key";
+
+
+    private MovieInfo [] movieData;
+    private String lastSortOrder = "";
+
 
 
 
@@ -38,13 +49,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityAdapt
     private TextView errorMessageDisplay;
     private ProgressBar loadingIndicator;
     private MainActivityAdapter mainActivityAdapter;
+    private GridLayoutManager layoutManager;
 
     private Spinner spinner;
-    private int spinnerSavedIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         setContentView(R.layout.activity_main);
 
@@ -54,19 +66,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityAdapt
         loadingIndicator = (ProgressBar)findViewById(R.id.loading_indicator);
 
         int spanCount = 2;//number of columns
-        GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount);
+        layoutManager = new GridLayoutManager(this, spanCount);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
         mainActivityAdapter = new MainActivityAdapter(this);
 
         recyclerView.setAdapter(mainActivityAdapter);
+        if(savedInstanceState != null){
+            movieData = (MovieInfo[])savedInstanceState.getParcelableArray(LIST_KEY);
+            lastSortOrder = savedInstanceState.getString(SORT_ORDER_KEY);
+            setMovieData(movieData);
+            layoutManager.scrollToPosition(savedInstanceState.getInt(POS_KEY));
 
-        /**TODO why does the saveInstantState become null when I navigate to the MovieDetailActivity?
-         *the activity does do onSaveInstanceState right after i navigate away from it, but when i check
-         *the value after coming back to it it's null.
-         **/
 
+        }else{
+                loadMovieData(Constants.SortOrder.POPULAR);
+
+        }
     }
 
 
@@ -75,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityAdapt
         Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
 
         //Pass in the movieObject class that has all the data the movie
-        intent.putExtra(Constants.ExtraData.OBJECT, movieInfoObject);
+        intent.putExtra(Constants.ExtraData.OBJECT,(Serializable) movieInfoObject);
 
         //Launch the detail activity to display more details about the movie
         startActivity(intent);
@@ -84,18 +101,27 @@ public class MainActivity extends AppCompatActivity implements MainActivityAdapt
 
     //Load movie data based on what sorting order the user has selected
     private void  loadMovieData(String sortBy){
-        Bundle queryBundle = new Bundle();
-        queryBundle.putString(Constants.SortOrder.KEY, sortBy);
 
-        LoaderManager loaderManager = getSupportLoaderManager();
-        Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(Constants.LoaderID.MainActivity_LOADER_ID);
-        if (movieSearch == null) {
-            loaderManager.initLoader(Constants.LoaderID.MainActivity_LOADER_ID, queryBundle, new FetchMovieData(this));
-        } else {
-            loaderManager.restartLoader(Constants.LoaderID.MainActivity_LOADER_ID, queryBundle, new FetchMovieData(this));
-        }
+            Bundle queryBundle = new Bundle();
+            queryBundle.putString(Constants.SortOrder.KEY, sortBy);
+
+            LoaderManager loaderManager = getSupportLoaderManager();
+            Loader<MovieInfo[]> movieSearch = loaderManager.getLoader(Constants.LoaderID.MainActivity_LOADER_ID);
+            if (movieSearch == null) {
+                loaderManager.initLoader(Constants.LoaderID.MainActivity_LOADER_ID, queryBundle, new FetchMovieData(this));
+            } else {
+                loaderManager.restartLoader(Constants.LoaderID.MainActivity_LOADER_ID, queryBundle, new FetchMovieData(this));
+            }
+
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArray(LIST_KEY, movieData);
+        outState.putInt(POS_KEY, layoutManager.findFirstVisibleItemPosition());
+        outState.putString(SORT_ORDER_KEY, spinner.getSelectedItem().toString());
+    }
 
     //Methods to manage views
     public void showLoadingIndicator(){
@@ -115,25 +141,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityAdapt
 
 
     public void setMovieData(MovieInfo[] movieData){
+        this.movieData = movieData;
         mainActivityAdapter.setMovieData(movieData);
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        Log.v(TAG, "onRestoreInstanceState");
-        super.onRestoreInstanceState(savedInstanceState);
-        spinnerSavedIndex = savedInstanceState.getInt(SORT_ORDER_KEY);
-    }
 
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        Log.v(TAG, "onSaveInstanceState");
-        super.onSaveInstanceState(outState);
-        if(spinner != null)
-         outState.putInt(SORT_ORDER_KEY, spinner.getSelectedItemPosition());
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -146,20 +158,27 @@ public class MainActivity extends AppCompatActivity implements MainActivityAdapt
                 R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        if(spinnerSavedIndex != -1){
-            spinner.setSelection(spinnerSavedIndex);
-            spinnerSavedIndex = -1;
-        }
 
         //Listens for dropdown menu selections
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String spinnerSelectedItem;
+                if(lastSortOrder.isEmpty())
+                    spinnerSelectedItem = parent.getItemAtPosition(position).toString();
+                else {
+                    spinnerSelectedItem = lastSortOrder;
+                    if(lastSortOrder == getString(R.string.sortBy_most_popular)){
+                        spinner.setSelection(0);
+                    }else{
+                        spinner.setSelection(1);
+                    }
 
-                String spinnerSelectedItem = parent.getItemAtPosition(position).toString();
+                    lastSortOrder = "";
+                }
                 if(spinnerSelectedItem.equals(getString(R.string.sortBy_most_popular))){
-                    loadMovieData(Constants.SortOrder.POPULAR);
+                 loadMovieData(Constants.SortOrder.POPULAR);
                 }else if(spinnerSelectedItem.equals(getString(R.string.sortBy_highest_rated))) {
-                    loadMovieData(Constants.SortOrder.TOP_RATED);
+                 loadMovieData(Constants.SortOrder.TOP_RATED);
                 }
 
 
